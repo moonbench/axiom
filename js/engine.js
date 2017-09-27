@@ -77,7 +77,7 @@ var Engine = (function(){
   return {
     create: function(world, canvas_id, fps_meter_id){
       var engine = {
-        fps: 30,
+        fps: 60,
         now: null,
         last: current_time_in_ms(),
         remainder: 0,
