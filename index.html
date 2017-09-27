@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Untitled project</title>
+
+  <style type="text/css">
+    body{
+      background-color: #050505;
+      color: #BEBEBE;
+      font-family: arial, sans-serif;
+    }
+    #fps_meter{
+      width: 800px;
+      margin: 0px auto;
+      min-height: 4em;
+    }
+    #game_canvas{
+      border: 1px solid #333;
+      background-color: #000;
+      cursor: none;
+      display: block;
+      margin: 0px auto;
+    }
+    #container{
+      width: 800px;
+      margin: 0px auto;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="fps_meter">
+    </div>
+    <div id="game">
+      <canvas id="game_canvas" width="800" height="600"></canvas>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/cursor.js"></script>
+  <script type="text/javascript" src="js/meter.js"></script>
+  <script type="text/javascript" src="js/viewport.js"></script>
+  <script type="text/javascript" src="js/entity.js"></script>
+  <script type="text/javascript" src="js/world.js"></script>
+  <script type="text/javascript" src="js/engine.js"></script>
+
+  <script type="text/javascript">
+    var world = World.create(3000, 3000);
+    var engine = Engine.create(world, "game_canvas", "fps_meter");
+    engine.run();
+  </script>
+</body>
+</html>
