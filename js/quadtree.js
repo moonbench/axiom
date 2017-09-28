@@ -66,89 +66,53 @@ var QuadTree = (function(){
     /*
      * Accessors
      */
-    function all_items_in(node){
-      if(node.children.length > 0){
-        var items = [];
-        node.children.forEach(function(child){
-          items = items.concat(all_items_in(child));
-        });
-        return items.filter(function(value, index, self){ return self.indexOf(value) === index; });
-      }
-      return node.items;
-    }
-
-    function is_dirt_beyond_bounds(node){
-      var dirt_beyond_edges = false;
-      node.children.forEach(function(child){
-        if(node_is_dirty(child)){
-          child.items.forEach(function(entity){
-            dirt_beyond_edges = dirt_beyond_edges ||
-            (entity.x + entity.max.x > node.x + node.width ||
-              entity.y + entity.max.y > node.y + node.height ||
-              entity.x + entity.min.x < node.x ||
-              entity.y + entity.min.y < node.y)
-          });
-        }
-      });
-      return dirt_beyond_edges;
-    }
-    function node_is_dirty(node){
-      var is_dirty = false;
-      if(node.children.length > 0){
-        is_dirty = is_dirt_beyond_bounds(node);
-      } else {
-        node.items.forEach(function(entity){ is_dirty = is_dirty || entity.moved });
-      }
-      return is_dirty;
-    }
-
-
-    /*
-     * Updating
-     */
-    function recompute_items_if_dirty(node){
-      if(!node_is_dirty(node)) return;
-
-      var dirty_items = all_items_in(node);
-      node.children = [];
-      node.items = [];
-
-      dirty_items.forEach(function(entity){ add_entity_to_node(entity, node) });
-    }
-
     function run_collision_checks(node){
-      for(var i = 0; i < node.items.length; i++){
-        for(var j = i+1; j < node.items.length; j++){
-          node.items[i].check_collision_against(node.items[j]);
-
+      if(node.children.length > 0){
+        node.children.forEach(run_collision_checks);
+      } else {
+        for(var i = 0; i < node.items.length; i++){
+          for(var j = i+1; j < node.items.length; j++){
+            node.items[i].check_collision_against(node.items[j]);
+          }
         }
       }
     }
-
-    function update(node, dt){
-      recompute_items_if_dirty(node);
-      if(node.children.length > 0){
-        node.children.forEach(function(child){update(child, dt)});
-      } else {
-        run_collision_checks(node);
-      }
-    }
-
 
     /*
      * Rendering
      */
+    function draw_debug_text(node, ctx, dt){
+      ctx.strokeText("C: " + node.children.length, node.width/2, node.height/2);
+      ctx.strokeText("I: " + node.items.length, node.width/2, node.height/2+10);
+    }
     function draw_quad_node(engine, node, ctx, dt){
-      ctx.save();
-      ctx.translate( engine.viewport.adjusted_x(node.x), engine.viewport.adjusted_y(node.y));
-      ctx.fillStyle = "rgba(100, 100, 200, 0.15)";
+      ctx.fillStyle = "rgba(100, 100, 200, 0.08)";
       ctx.fillRect(0, 0, node.width, node.height);
       ctx.strokeStyle = "#111111";
       ctx.strokeRect(0, 0, node.width, node.height);
-      ctx.restore(); 
+    }
+    function draw_debug_links(node, ctx, dt){
+      ctx.beginPath();
+      node.items.forEach(function(item){
+        ctx.moveTo(node.width/2, node.height/2);
+        ctx.lineTo(item.x - node.x,item.y - node.y);
+      });
+      ctx.stroke();
     }
     function render(engine, node, ctx, dt){
-      draw_quad_node(engine, node, ctx, dt);
+      if(node.debug_level >= 1){
+        ctx.save();
+        ctx.translate( engine.viewport.adjusted_x(node.x), engine.viewport.adjusted_y(node.y));
+        draw_quad_node(engine, node, ctx, dt);
+        ctx.strokeStyle = "#2b97b4";
+        if(node.debug_level>=2){
+          draw_debug_links(node, ctx, dt);
+        }
+        if(node.debug_level>=3){
+          draw_debug_text(node, ctx, dt);
+        }
+        ctx.restore();
+      }
       node.children.forEach(function(child){ render(engine, child, ctx, dt) });
     }
 
@@ -163,7 +127,9 @@ var QuadTree = (function(){
           items: [],
           children: [],
         }
+        node.debug_level = 1;
 
+        node.run_collision_checks = function(){ run_collision_checks(node) }
         node.add = function(entity){ add_entity_to_node(entity, node) }
         node.update = function(dt){ update(node, dt) }
         node.render = function(engine, ctx, dt){ render(engine, node, ctx, dt) }
@@ -177,10 +143,11 @@ var QuadTree = (function(){
   // Tree is built from a root node
   return {
     create: function(world){
-      var tree = {root: Node.create(0, 0, world.width, world.height)};
+      var tree = {};
 
       tree.add = function(entity){ tree.root.add(entity) }
-	tree.update = function(dt){ tree.root.update(dt) }
+      tree.reset = function(){ tree.root = Node.create(0, 0, world.width, world.height) }
+      tree.run_collision_checks = function(){ tree.root.run_collision_checks() }
       tree.render = function(ctx, dt){ tree.root.render(ctx, dt) }
 
       return tree;

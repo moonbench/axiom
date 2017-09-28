@@ -2,20 +2,23 @@
 
 var World = (function (){
   function update(world, dt){
-    world.entities.forEach(function(entity){ entity.update(dt) });
-    world.quadtree.update(dt);
+    world.quadtree.reset();
+    world.entities.forEach(function(entity){
+	entity.update(dt);
+	world.quadtree.add(entity);
+    });
+    world.quadtree.run_collision_checks();
   }
 
 
   function render(world, engine, dt){
-    world.quadtree.render(engine, engine.ctx, dt);
     world.entities.forEach(function(entity){ entity.render(engine.viewport, engine.ctx, dt) });
+    world.quadtree.render(engine, engine.ctx, dt);
   }
 
 
   function add_entity_to_world(entity, world){
     world.entities.push(entity);
-    world.quadtree.add(entity);
   }
 
   return {
