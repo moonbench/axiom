@@ -79,7 +79,7 @@ var Entity = (function (){
   * Rendering
   */
   function render_box_outline(entity, ctx, dt){
-    ctx.fillStyle = entity.moved ? "#136850" : "#2f435A";
+    ctx.fillStyle = "#2f435A";
     ctx.fillRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
     ctx.strokeRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
   }
@@ -232,8 +232,6 @@ var Entity = (function (){
   function reset(entity){
     entity.something_within_radius = false;
     entity.something_within_aabb = false;
-    entity.moved = false;
-    entity.rotated = false;
     entity.collision_checks = {};
     entity.collisions = [];
   }
