@@ -1,13 +1,6 @@
 "use strict";
 
 var Entity = (function (){
-  /*
-  * Updating
-  */
-  function update(entity, dt){
-    normalize(entity);
-  }
-
 
   /*
    * Collision check
@@ -86,6 +79,7 @@ var Entity = (function (){
   * Rendering
   */
   function render_box_outline(entity, ctx, dt){
+    ctx.fillStyle = entity.moved ? "#136850" : "#2f435A";
     ctx.fillRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
     ctx.strokeRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
   }
@@ -234,17 +228,21 @@ var Entity = (function (){
     entity.edges.push([entity.corners.bottom_left, entity.corners.top_left]);
     return entity;
   }
+
+  function reset(entity){
+    entity.something_within_radius = false;
+    entity.something_within_aabb = false;
+    entity.moved = false;
+    entity.rotated = false;
+    entity.collision_checks = {};
+    entity.collisions = [];
+  }
   function normalize(entity){
     entity.angle = entity.angle % (Math.PI * 2);
     entity.max_radius = Math.sqrt( Math.pow(entity.width/2,2) + Math.pow(entity.height/2,2));
-    entity.something_within_radius = false;
-    entity.something_within_aabb = false;
-    entity.collision_checks = {};
-    entity.collisions = [];
     calculate_corners(entity);
     calculate_limits(entity);
     set_edges(entity);
-    return entity;
   }
 
   /*
@@ -258,12 +256,14 @@ var Entity = (function (){
         width: width,
         height: height,
         angle: angle,
-        moved: false,
       };
       entity.debug_level = 3;
+      reset(entity);
       normalize(entity);
 
-      entity.update = function(dt){ update(entity, dt) };
+      entity.reset = function(){ reset(entity) };
+      entity.normalize = function(){ normalize(entity) };
+      entity.update = function(){ reset(entity) };
       entity.render = function(viewport, ctx, dt){ render(entity, viewport, ctx, dt) };
 
       entity.check_collision_against = function(other_entity, no_checkback){ is_entity_colliding(entity, other_entity, no_checkback) };
