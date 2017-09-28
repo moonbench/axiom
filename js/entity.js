@@ -5,6 +5,7 @@ var Entity = (function (){
   * Updating
   */
   function update(entity, dt){
+    normalize(entity);
   }
 
 
@@ -85,8 +86,8 @@ var Entity = (function (){
   * Rendering
   */
   function render_box_outline(entity, ctx, dt){
-    ctx.fillRect(-entity.width/2, -entity.height/2, entity.width, entity.height);
-    ctx.strokeRect(-entity.width/2, -entity.height/2, entity.width, entity.height);
+    ctx.fillRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
+    ctx.strokeRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
   }
   function render_crosshair(entity, ctx, dt){
     ctx.beginPath();
@@ -128,7 +129,7 @@ var Entity = (function (){
   function render_alignment_vector(entity, ctx, dt){
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(entity.corners.top[0], entity.corners.top[1]);
+    ctx.lineTo(entity.corners.right[0], entity.corners.right[1]);
     ctx.stroke();
   }
   function render_collision_checks(entity, ctx, dt){
@@ -145,12 +146,12 @@ var Entity = (function (){
     ctx.setLineDash([]);
   }
   function render_collisions(entity, ctx, dt){
+    ctx.lineWidth = 3;
     entity.collisions.forEach(function(collision){
       ctx.strokeStyle = "#DEDEDE";
       ctx.strokeRect(collision.intersection_point[0]-4, collision.intersection_point[1]-4, 8, 8);
 
       ctx.beginPath();
-      ctx.lineWidth = 3;
       ctx.strokeStyle = "#F88402";
       var surface = Vector.create( collision.surface_angle, 20 );
       var normal = Vector.create( collision.normal_angle, 60 );
@@ -176,6 +177,7 @@ var Entity = (function (){
     render_boundary_circle(entity, ctx, dt);
     render_collision_checks(entity, ctx, dt);
     render_collisions(entity, ctx, dt);
+    ctx.lineWidth = 1;
     ctx.strokeStyle = "#42a529";
     if(entity.debug_level < 3) return;
     render_edges(entity, ctx, dt);
@@ -214,8 +216,8 @@ var Entity = (function (){
   }
   function calculate_corners(entity){
     entity.corners = {};
-    entity.corners.top = [Math.sin(entity.angle)*entity.height/2, -Math.cos(entity.angle)*entity.height/2];
-    entity.corners.right = [Math.cos(entity.angle)*entity.width/2, Math.sin(entity.angle)*entity.width/2];
+    entity.corners.top = [Math.sin(entity.angle)*entity.width/2, -Math.cos(entity.angle)*entity.width/2];
+    entity.corners.right = [Math.cos(entity.angle)*entity.height/2, Math.sin(entity.angle)*entity.height/2];
     entity.corners.bottom = [-entity.corners.top[0], -entity.corners.top[1]];
     entity.corners.left = [-entity.corners.right[0], -entity.corners.right[1]];
     entity.corners.top_right = [entity.corners.top[0]+entity.corners.right[0], entity.corners.top[1]+entity.corners.right[1]];
