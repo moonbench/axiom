@@ -83,10 +83,10 @@ var QuadTree = (function(){
         if(node_is_dirty(child)){
           child.items.forEach(function(entity){
             dirt_beyond_edges = dirt_beyond_edges ||
-            (entity.max.x > node.x + node.width ||
-              entity.max.y > node.y + node.height ||
-              entity.min.x < node.x ||
-              entity.min.y < node.y)
+            (entity.x + entity.max.x > node.x + node.width ||
+              entity.y + entity.max.y > node.y + node.height ||
+              entity.x + entity.min.x < node.x ||
+              entity.y + entity.min.y < node.y)
           });
         }
       });
