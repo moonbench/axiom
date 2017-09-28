@@ -11,18 +11,19 @@ var MoveableEntity = (function(){
     return vector;
   }
   function move(entity, dt){
-    entity.moved = true;
     entity.x = entity.vector.x_after(entity.x, dt);
     entity.y = entity.vector.y_after(entity.y, dt);
+    entity.moved = true;
   }
   function update(entity, dt){
-    entity.moved = true;
+    entity.moved = false;
+    entity.rotated = false;
+
     var movement_vector = Vector.create(0, 0);
     movement_vector.add_vector( acceleration_vector(entity));
     entity.vector.add_vector(movement_vector);
 
     if(entity.vector.magnitude <= 0) return;
-
     move(entity, dt);
   }
 
