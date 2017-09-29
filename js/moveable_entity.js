@@ -44,12 +44,14 @@ var MoveableEntity = (function(){
     movement_vector.add_vector( acceleration_vector(entity));
     entity.vector.add_vector(movement_vector);
 
+    if(entity.vector.magnitude <= 0.1) entity.vector.magnitude = 0;
     if(entity.vector.magnitude <= 0) return;
     move(entity, dt);
+    entity.vector.magnitude -= (entity.vector.magnitude * dt);
   }
 
 
-  function draaw_velocity_vector(entity, ctx, dt){
+  function draw_velocity_vector(entity, ctx, dt){
     ctx.strokeStyle = "#e3c440";
     ctx.lineWidth = 3;
     ctx.beginPath();
@@ -62,7 +64,7 @@ var MoveableEntity = (function(){
 
     ctx.save();
     ctx.translate( viewport.adjusted_x(entity.x), viewport.adjusted_y(entity.y));
-    draw_velocity_vector(ctx, dt);
+    draw_velocity_vector(entity, ctx, dt);
     ctx.restore();
   }
 
