@@ -1,7 +1,11 @@
 "use strict";
 
 var World = (function (){
-  function update(world, dt){
+  function update(world, engine, dt){
+    world.player_entities.forEach(function(entity){
+      entity.turn_towards(engine.cursor.x, engine.cursor.y);
+    });
+
     world.quadtree.reset();
     world.entities.forEach(function(entity){
 	entity.update(dt);
@@ -17,6 +21,10 @@ var World = (function (){
   }
 
 
+  function add_player_entity_to_world(entity, world){
+    world.entities.push(entity);
+    world.player_entities.push(entity);
+  }
   function add_entity_to_world(entity, world){
     world.entities.push(entity);
   }
@@ -27,12 +35,14 @@ var World = (function (){
         width: width,
         height: height,
         entities: [],
+        player_entities: [],
       };
       world.quadtree = QuadTree.create(world);
 
+      world.add_player_entity = function(entity){ add_player_entity_to_world(entity, world) };
       world.add_entity = function(entity){ add_entity_to_world(entity, world) };
 
-      world.update = function(dt){ update(world, dt); };
+      world.update = function(engine, dt){ update(world, engine, dt); };
       world.render = function(engine, dt){ render(world, engine, dt); };
 
       return world;

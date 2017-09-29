@@ -13,6 +13,38 @@ var Util = (function(){
         return [e1x1 + (t * s1_x), e1y1 + (t * s1_y)];
       }
       return false;
-    }
+    },
+    normalize_angle: function(angle){
+      var angle = angle % (Math.PI * 2);
+      return angle >= 0 ? angle : angle += Math.PI*2;
+    },
+    limit: function(value, max, min){
+      if(value>max) return max;
+      if(value<min) return min;
+      return value;
+    },
   }
 })();
+
+var KEY = {
+    ENTER: 13,
+    SHIFT: 16,
+    A:     65,
+    D:     68,
+    S:     83,
+    W:     87,
+    UP:    38,
+    DOWN:  40,
+    LEFT:  37,
+    RIGHT: 39,
+    N0:    48,
+    N1:    49,
+    N2:    50,
+    N3:    51,
+    N4:    52,
+    N5:    53,
+    N6:    54,
+    N7:    55,
+    N8:    56,
+    N9:    57,
+};
