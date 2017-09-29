@@ -236,7 +236,7 @@ var Entity = (function (){
     entity.collisions = [];
   }
   function normalize(entity){
-    entity.angle = entity.angle % (Math.PI * 2);
+    entity.angle = Util.normalize_angle(entity.angle);
     entity.max_radius = Math.sqrt( Math.pow(entity.width/2,2) + Math.pow(entity.height/2,2));
     calculate_corners(entity);
     calculate_limits(entity);

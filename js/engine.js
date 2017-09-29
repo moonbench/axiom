@@ -13,7 +13,7 @@ var Engine = (function(){
   * Game loop
   */
   function update(engine, dt){
-    world.update(dt);
+    world.update(engine, dt);
   }
   function render(engine, dt){
     engine.viewport.render_background(engine.ctx, engine.remainder);
@@ -52,7 +52,9 @@ var Engine = (function(){
   }
 
   function handle_key(engine, event, pressed){
-
+    engine.world.player_entities.forEach(function(entity){
+      entity.handle_key(event, pressed);
+    });
   }
   function handle_mouse_button(engine, event, pressed){
     engine.cursor.set_pressed(pressed);
@@ -77,7 +79,7 @@ var Engine = (function(){
   return {
     create: function(world, canvas_id, fps_meter_id){
       var engine = {
-        fps: 60,
+        fps: 30,
         now: null,
         last: current_time_in_ms(),
         remainder: 0,
