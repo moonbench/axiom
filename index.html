@@ -52,6 +52,13 @@
 
   <script type="text/javascript">
     var world = World.create(800, 600);
+    var car = DriveableEntity.create(500, 300, 50, 80, Math.PI);
+    car.is_selected = true;
+    world.add_player_entity(car);
+
+    world.add_entity(Entity.create(200, 300, 90, 280, Math.PI/4));
+    world.add_entity(Entity.create(600, 500, 20, 300, 0));
+
     var engine = Engine.create(world, "game_canvas", "fps_meter");
     engine.run();
   </script>
