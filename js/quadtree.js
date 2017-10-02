@@ -120,10 +120,10 @@ var QuadTree = (function(){
     return {
       create: function(x, y, width, height){
         var node = {
-          x: x,
-          y: y,
-          width: width,
-          height: height,
+          x,
+          y,
+          width,
+          height,
           items: [],
           children: [],
         }

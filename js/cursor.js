@@ -18,8 +18,8 @@ var Cursor = (function(){
   return {
     create: function(x, y){
       var cursor = {
-        x: x,
-        y: y,
+        x,
+        y,
         pressed: false
       };
 

@@ -33,8 +33,8 @@ var World = (function (){
   return {
     create: function(width, height){
       var world = {
-        width: width,
-        height: height,
+        width,
+        height,
         entities: [],
         player_entities: [],
       };

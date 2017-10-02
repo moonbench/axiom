@@ -54,14 +54,14 @@ var Viewport = (function() {
   * Public methods
   */
   return {
-    create: function(canvas, world){
+    create: function(canvas){
       var viewport = {
         width: canvas.width,
         height: canvas.height,
         x: 0,
         y: 0,
         world_x_offset: 0,
-        world_y_offset: 0
+        world_y_offset: 0,
       };
       update_limits(viewport);
 

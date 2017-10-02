@@ -79,13 +79,13 @@ var Engine = (function(){
   return {
     create: function(world, canvas_id, fps_meter_id){
       var engine = {
+        world,
         fps: 60,
         now: null,
         last: current_time_in_ms(),
         remainder: 0,
         slow: 1,
         canvas: document.getElementById(canvas_id),
-        world, world,
       };
 
       update_timing(engine);

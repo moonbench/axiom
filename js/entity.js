@@ -284,13 +284,13 @@ var Entity = (function (){
   * Public methods
   */
   return {
-    create: function(world_x, world_y, width, height, angle){
+    create: function(x, y, width, height, angle){
       var entity = {
-        x: world_x,
-        y: world_y,
-        width: width,
-        height: height,
-        angle: angle,
+        x,
+        y,
+        width,
+        height,
+        angle,
       };
       entity.debug_level = 3;
       reset(entity);
