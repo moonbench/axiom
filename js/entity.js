@@ -65,9 +65,11 @@ var Entity = (function (){
     var b_max = scalars_b.reduce(function(a,b){ return Math.max(a,b); });
 
     if(b_max < a_max && b_max > a_min){
-        return (b_max - a_min)/Math.abs(axis[0]);
+      var denom = Math.abs(axis[0]) > 0 ? Math.abs(axis[0]) : Math.abs(axis[1]);
+      return (b_max - a_min)/denom;
     } else if(b_min > a_min && b_min < a_max){
-        return -(a_max - b_min)/Math.abs(axis[1]);
+      var denom = Math.abs(axis[1]) > 0 ? Math.abs(axis[1]) : Math.abs(axis[0]);
+      return -(a_max - b_min)/denom;
     }
     return b_max > a_min && b_min < a_max;
   }
@@ -82,27 +84,27 @@ var Entity = (function (){
     var axis_distance = [];
     axis.push([a.corners.top_right[0] - a.corners.top_left[0], a.corners.top_right[1] - a.corners.top_left[1]]);
     axis_distance[axis.length-1] = penetration_distance(a, b, axis[axis.length-1]);
-    if(axis_distance[axis.length-1] == false) return false;
+    if(axis_distance[axis.length-1] === false) return false;
 
     axis.push([a.corners.top_right[0] - a.corners.bottom_right[0], a.corners.top_right[1] - a.corners.bottom_right[1]]);
     axis_distance[axis.length-1] = penetration_distance(a, b, axis[axis.length-1]);
-    if(axis_distance[axis.length-1] == false) return false;
+    if(axis_distance[axis.length-1] === false) return false;
 
     axis.push([b.corners.top_right[0] - b.corners.top_left[0], b.corners.top_right[1] - b.corners.top_left[1]]);
     axis_distance[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
-    if(axis_distance[axis.length-1] == false) return false;
+    if(axis_distance[axis.length-1] === false) return false;
 
     axis.push([b.corners.top_right[0] - b.corners.bottom_right[0], b.corners.top_right[1] - b.corners.bottom_right[1]]);
     axis_distance[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
-    if(axis_distance[axis.length-1] == false) return false;
+    if(axis_distance[axis.length-1] === false) return false;
 
     // We are overlapping
     axis_distance.forEach(function(distance, index){
-    if(distance !== true && (!a.resolution_vector ||  Math.abs(distance) < Math.abs(a.resolution_vector.magnitude))){
-      if(index == 0) a.resolution_vector = Vector.create(a.angle, distance);
-      else if(index == 1) a.resolution_vector = Vector.create(a.angle-Math.PI/2, distance);
-      else if(index == 2) a.resolution_vector = Vector.create(b.angle+Math.PI, distance);
-      else if(index == 3)	a.resolution_vector = Vector.create(b.angle+Math.PI/2, distance);
+      if((distance !== true && distance != 0) && (!a.resolution_vector ||  Math.abs(distance) < Math.abs(a.resolution_vector.magnitude))){
+        if(index == 0) a.resolution_vector = Vector.create(a.angle, distance);
+        else if(index == 1) a.resolution_vector = Vector.create(a.angle-Math.PI/2, distance);
+        else if(index == 2) a.resolution_vector = Vector.create(b.angle+Math.PI, distance);
+        else if(index == 3) a.resolution_vector = Vector.create(b.angle+Math.PI/2, distance);
       }
     });
 
