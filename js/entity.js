@@ -22,57 +22,93 @@ var Entity = (function (){
       entity_min_x < other_entity_max_x &&
       entity_min_y < other_entity_max_y;
   }
-  function is_entity_close_to_colliding(check){
-    check.within_radius = entities_within_radius_bounds(check.entity, check.other_entity);
-    if(!check.within_radius) return false;
-    check.entity.something_within_radius = true;
-    check.other_entity.something_within_radius = true;
+  function entities_are_close_to_colliding(a, b){
+    var within_radius = entities_within_radius_bounds(a, b);
+    if(!within_radius) return false;
+    a.something_within_radius = true;
+    b.something_within_radius = true;
 
-    check.within_aabb = entities_within_aabb_bounds(check.entity, check.other_entity);
-    if(!check.within_aabb) return false;
-    check.entity.something_within_aabb = true;
-    check.other_entity.something_within_aabb = true;
+    var within_aabb = entities_within_aabb_bounds(a, b);
+    if(!within_aabb) return false;
+    a.something_within_aabb = true;
+    b.something_within_aabb = true;
 
     return true;
   }
 
-  function is_colliding(check){
-    var collision_found = false;
-    check.entity.edges.forEach(function(edge1){
-      var own_edge = [[check.entity.x + edge1[0][0], check.entity.y + edge1[0][1]],
-      [check.entity.x + edge1[1][0], check.entity.y + edge1[1][1]]];
-      check.other_entity.edges.forEach(function(edge2){
-        var other_edge = [[check.other_entity.x + edge2[0][0], check.other_entity.y + edge2[0][1]],
-        [check.other_entity.x + edge2[1][0], check.other_entity.y + edge2[1][1]]];
-        var intersection_point = Util.lines_intersect(own_edge, other_edge);
-        if(intersection_point){
-          collision_found = true;
-          var collision = {
-            intersection_point: [intersection_point[0] - check.entity.x, intersection_point[1] - check.entity.y],
-            surface_angle: Math.atan2( edge2[1][1] - edge2[0][1], edge2[1][0] - edge2[0][0] ),
-          };
-          collision.normal_angle = collision.surface_angle - Math.PI/2;
-          collision.resolution_vector = Vector.create(collision.normal_angle, 30);
-          check.entity.collisions.push(collision);
-        }
-      });
-    });
-    return collision_found;
+  function projection(point_x, point_y, axis){
+    var proj = ((point_x * axis[0]) + (point_y*axis[1]))/(Math.pow(axis[0],2)+Math.pow(axis[1],2));
+    return [proj * axis[0], proj * axis[1]];
   }
+  function project_entity_on_axis(entity, axis, x_offset = 0, y_offset = 0){
+    return {top_left: projection(x_offset+entity.corners.top_left[0], y_offset+entity.corners.top_left[1], axis),
+      top_right: projection(x_offset+entity.corners.top_right[0], y_offset+entity.corners.top_right[1], axis),
+      bottom_left: projection(x_offset+entity.corners.bottom_left[0], y_offset+entity.corners.bottom_left[1], axis),
+      bottom_right: projection(x_offset+entity.corners.bottom_right[0], y_offset+entity.corners.bottom_right[1], axis)};
+  }
+  function projection_to_scalar(projection, axis){
+    return projection[0]*axis[0] + projection[1]*axis[1];
+  }
+  function penetration_distance(a, b, axis){
+    var projection_a = project_entity_on_axis(a, axis);
+    var projection_b = project_entity_on_axis(b, axis, b.x - a.x, b.y - a.y);
+    var scalars_a = [], scalars_b = [];
+    Object.keys(projection_a).forEach(function(edge){
+        scalars_a.push(projection_to_scalar(projection_a[edge], axis));
+    });
+    Object.keys(projection_b).forEach(function(edge){
+        scalars_b.push(projection_to_scalar(projection_b[edge], axis));
+    });
+    var a_min = scalars_a.reduce(function(a,b){ return Math.min(a,b); });
+    var a_max = scalars_a.reduce(function(a,b){ return Math.max(a,b); });
+    var b_min = scalars_b.reduce(function(a,b){ return Math.min(a,b); });
+    var b_max = scalars_b.reduce(function(a,b){ return Math.max(a,b); });
 
-  function is_entity_colliding(entity, other_entity, no_checkback){
-    var key = other_entity.x + "." + other_entity.y + "." + other_entity.angle.toFixed(3) + "." + other_entity.width + "." + other_entity.height;
-    if(entity.collision_checks[key] != undefined) return entity.collision_checks[key].is_colliding;
+    if(b_max < a_max && b_max > a_min){
+        return (b_max - a_min)/Math.abs(axis[0]);
+    } else if(b_min > a_min && b_min < a_max){
+        return -(a_max - b_min)/Math.abs(axis[1]);
+    }
+    return b_max > a_min && b_min < a_max;
+  }
+  function check_collision_against(a, b, no_checkback){
+    var key = b.x + "." + b.y + "." + b.angle.toFixed(3) + "." + b.width + "." + b.height;
+    if(a.collision_checks[key] != undefined) return a.collision_checks[key].is_colliding;
+    a.collision_checks[key] = {other_entity: b, is_colliding: false};;
 
-    var check = {entity: entity, other_entity: other_entity, is_colliding: false};
-    entity.collision_checks[key] = check;
+    if(!entities_are_close_to_colliding(a,b)) return false;
 
-    if(!is_entity_close_to_colliding(check)) return;
-    if(!is_colliding(check)) return;
+    var axis = [];
+    var axis_distance = [];
+    axis.push([a.corners.top_right[0] - a.corners.top_left[0], a.corners.top_right[1] - a.corners.top_left[1]]);
+    axis_distance[axis.length-1] = penetration_distance(a, b, axis[axis.length-1]);
+    if(axis_distance[axis.length-1] == false) return false;
 
-    check.is_colliding = true;
+    axis.push([a.corners.top_right[0] - a.corners.bottom_right[0], a.corners.top_right[1] - a.corners.bottom_right[1]]);
+    axis_distance[axis.length-1] = penetration_distance(a, b, axis[axis.length-1]);
+    if(axis_distance[axis.length-1] == false) return false;
 
-    if(!no_checkback) other_entity.check_collision_against(entity, true);
+    axis.push([b.corners.top_right[0] - b.corners.top_left[0], b.corners.top_right[1] - b.corners.top_left[1]]);
+    axis_distance[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
+    if(axis_distance[axis.length-1] == false) return false;
+
+    axis.push([b.corners.top_right[0] - b.corners.bottom_right[0], b.corners.top_right[1] - b.corners.bottom_right[1]]);
+    axis_distance[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
+    if(axis_distance[axis.length-1] == false) return false;
+
+    // We are overlapping
+    axis_distance.forEach(function(distance, index){
+    if(distance !== true && (!a.resolution_vector ||  Math.abs(distance) < Math.abs(a.resolution_vector.magnitude))){
+      if(index == 0) a.resolution_vector = Vector.create(a.angle, distance);
+      else if(index == 1) a.resolution_vector = Vector.create(a.angle-Math.PI/2, distance);
+      else if(index == 2) a.resolution_vector = Vector.create(b.angle+Math.PI, distance);
+      else if(index == 3)	a.resolution_vector = Vector.create(b.angle+Math.PI/2, distance);
+      }
+    });
+
+    if(!no_checkback) b.check_collision_against(a, true);
+    a.collision_checks[key].is_colliding = true;
+    return true;
   }
 
   /*
@@ -126,6 +162,16 @@ var Entity = (function (){
     ctx.lineTo(entity.corners.right[0], entity.corners.right[1]);
     ctx.stroke();
   }
+  function render_resolution_vector(entity, ctx, dt){
+    if(!entity.resolution_vector) return;
+
+    ctx.strokeStyle = "#921f16";
+    ctx.beginPath();
+    ctx.lineWidth = 4;
+    ctx.moveTo(0,0);
+    ctx.lineTo(entity.resolution_vector.x_after(0, 1), entity.resolution_vector.y_after(0, 1));
+    ctx.stroke();
+  }
   function render_collision_checks(entity, ctx, dt){
     ctx.strokeStyle = "#DEDEDE";
     ctx.setLineDash([1, 4]);
@@ -134,21 +180,21 @@ var Entity = (function (){
       check = entity.collision_checks[check_key];
       ctx.beginPath();
       ctx.moveTo(0, 0);
-      ctx.lineTo(check.other_entity.x - check.entity.x, check.other_entity.y - check.entity.y);
+      ctx.lineTo(check.other_entity.x - entity.x, check.other_entity.y - entity.y);
       ctx.stroke();
     });
     ctx.setLineDash([]);
   }
   function render_collisions(entity, ctx, dt){
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
     entity.collisions.forEach(function(collision){
       ctx.strokeStyle = "#DEDEDE";
-      ctx.strokeRect(collision.intersection_point[0]-4, collision.intersection_point[1]-4, 8, 8);
+      ctx.strokeRect(collision.intersection_point[0]-2, collision.intersection_point[1]-2, 4, 4);
 
       ctx.beginPath();
       ctx.strokeStyle = "#F88402";
       var surface = Vector.create( collision.surface_angle, 20 );
-      var normal = Vector.create( collision.normal_angle, 60 );
+      var normal = collision.resolution_vector;
       ctx.moveTo( surface.x_after(collision.intersection_point[0], -1), surface.y_after(collision.intersection_point[1], -1));
       ctx.lineTo( surface.x_after(collision.intersection_point[0], 1), surface.y_after(collision.intersection_point[1], 1));
       ctx.moveTo( collision.intersection_point[0], collision.intersection_point[1]);
@@ -171,6 +217,7 @@ var Entity = (function (){
     render_boundary_circle(entity, ctx, dt);
     render_collision_checks(entity, ctx, dt);
     render_collisions(entity, ctx, dt);
+    render_resolution_vector(entity, ctx, dt);
     ctx.lineWidth = 1;
     ctx.strokeStyle = "#42a529";
     if(entity.debug_level < 3) return;
@@ -234,6 +281,7 @@ var Entity = (function (){
     entity.something_within_aabb = false;
     entity.collision_checks = {};
     entity.collisions = [];
+    entity.resolution_vector = false;
   }
   function normalize(entity){
     entity.angle = Util.normalize_angle(entity.angle);
@@ -264,7 +312,8 @@ var Entity = (function (){
       entity.update = function(){ reset(entity) };
       entity.render = function(viewport, ctx, dt){ render(entity, viewport, ctx, dt) };
 
-      entity.check_collision_against = function(other_entity, no_checkback){ is_entity_colliding(entity, other_entity, no_checkback) };
+      entity.check_collision_against = function(other_entity, no_checkback){ check_collision_against(entity, other_entity, no_checkback) };
+      entity.resolve_collision = function(){};
 
       return entity;
     }
