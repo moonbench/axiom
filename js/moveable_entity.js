@@ -1,6 +1,7 @@
 "use strict";
 
 var MoveableEntity = (function(){
+
   function acceleration_vector(entity){
     var vector = Vector.create(0,0);
     // TODO modify how much of each component we use when going diagonally

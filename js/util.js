@@ -42,12 +42,12 @@ var Util = (function(){
   }
 
   return {
-    lines_intersect: lines_intersect,
-    normalize_angle: normalize_angle,
-    limit: limit,
-    projection: projection,
-    projection_to_scalar: projection_to_scalar,
-    project_entity_on_axis: project_entity_on_axis,
+    lines_intersect,
+    normalize_angle,
+    limit,
+    projection,
+    projection_to_scalar,
+    project_entity_on_axis,
   }
 })();
 
