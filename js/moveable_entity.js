@@ -12,7 +12,7 @@ var MoveableEntity = (function(){
   }
   function resolve_collision(entity){
     if(!entity.resolution_vector) return;;
-     move_to(entity, entity.resolution_vector.x_after(entity.x, 1), entity.resolution_vector.y_after(entity.y, 1));
+    move_to(entity, entity.resolution_vector.x_after(entity.x, 1), entity.resolution_vector.y_after(entity.y, 1));
   }
   function turn_towards(entity, x, y){
     var angle_to_spot = Util.normalize_angle(Math.atan2(y-entity.y, x - entity.x));
