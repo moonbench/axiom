@@ -4,11 +4,15 @@ var MoveableEntity = (function(){
   function acceleration_vector(entity){
     var vector = Vector.create(0,0);
     // TODO modify how much of each component we use when going diagonally
-    if(entity.state.forward) vector.add( entity.angle, 1);
-    if(entity.state.reverse) vector.add( entity.angle + Math.PI, 1);
-    if(entity.state.left) vector.add( entity.angle - Math.PI/2, 1);
-    if(entity.state.right) vector.add( entity.angle + Math.PI/2, 1);
+    if(entity.state.forward) vector.add( entity.angle, 3);
+    if(entity.state.reverse) vector.add( entity.angle + Math.PI, 3);
+    if(entity.state.left) vector.add( entity.angle - Math.PI/2, 3);
+    if(entity.state.right) vector.add( entity.angle + Math.PI/2, 3);
     return vector;
+  }
+  function resolve_collision(entity){
+    if(!entity.resolution_vector) return;;
+     move_to(entity, entity.resolution_vector.x_after(entity.x, 1), entity.resolution_vector.y_after(entity.y, 1));
   }
   function turn_towards(entity, x, y){
     var angle_to_spot = Util.normalize_angle(Math.atan2(y-entity.y, x - entity.x));
@@ -26,18 +30,19 @@ var MoveableEntity = (function(){
     else if(entity.state.rotate<0) entity.state.rotate += 0.02*dt;
     entity.state.rotate = entity.state.rotate;
   }
-  function move(entity, dt){
-    entity.x = entity.vector.x_after(entity.x, dt);
-    entity.y = entity.vector.y_after(entity.y, dt);
+  function move_to(entity, x, y){
+    entity.x = x;
+    entity.y = y;
     entity.moved = true;
   }
   function update(entity, dt){
-    entity.moved = true;
+    entity.moved = false;
     entity.rotated = false;
 
     if(entity.state.rotate != 0){
       dampen_rotation(entity, dt);
       entity.angle += entity.state.rotate * dt;
+      entity.rotated = true;
     }
 
     var movement_vector = Vector.create(0, 0);
@@ -46,7 +51,7 @@ var MoveableEntity = (function(){
 
     if(entity.vector.magnitude <= 0.1) entity.vector.magnitude = 0;
     if(entity.vector.magnitude <= 0) return;
-    move(entity, dt);
+    move_to(entity, entity.vector.x_after(entity.x, dt), entity.vector.y_after(entity.y, dt));
     entity.vector.magnitude -= (entity.vector.magnitude * dt);
   }
 
@@ -82,6 +87,7 @@ var MoveableEntity = (function(){
       var parent_render = entity.render;
       entity.render = function(viewport, ctx, dt){ parent_render(viewport, ctx, dt); render(entity, viewport, ctx, dt) };
       entity.vector = Vector.create(0, 0);
+      entity.resolve_collision = function(){ resolve_collision(entity) };
 
       return entity;
     }

@@ -8,8 +8,9 @@ var World = (function (){
 
     world.quadtree.reset();
     world.entities.forEach(function(entity){
-	entity.update(dt);
-	world.quadtree.add(entity);
+      entity.resolve_collision();
+      entity.update(dt);
+      world.quadtree.add(entity);
     });
     world.quadtree.run_collision_checks();
   }
