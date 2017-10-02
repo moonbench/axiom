@@ -36,28 +36,15 @@ var Entity = (function (){
     return true;
   }
 
-  function projection(point_x, point_y, axis){
-    var proj = ((point_x * axis[0]) + (point_y*axis[1]))/(Math.pow(axis[0],2)+Math.pow(axis[1],2));
-    return [proj * axis[0], proj * axis[1]];
-  }
-  function project_entity_on_axis(entity, axis, x_offset = 0, y_offset = 0){
-    return {top_left: projection(x_offset+entity.corners.top_left[0], y_offset+entity.corners.top_left[1], axis),
-      top_right: projection(x_offset+entity.corners.top_right[0], y_offset+entity.corners.top_right[1], axis),
-      bottom_left: projection(x_offset+entity.corners.bottom_left[0], y_offset+entity.corners.bottom_left[1], axis),
-      bottom_right: projection(x_offset+entity.corners.bottom_right[0], y_offset+entity.corners.bottom_right[1], axis)};
-  }
-  function projection_to_scalar(projection, axis){
-    return projection[0]*axis[0] + projection[1]*axis[1];
-  }
   function penetration_distance(a, b, axis){
-    var projection_a = project_entity_on_axis(a, axis);
-    var projection_b = project_entity_on_axis(b, axis, b.x - a.x, b.y - a.y);
+    var projection_a = Util.project_entity_on_axis(a, axis);
+    var projection_b = Util.project_entity_on_axis(b, axis, b.x - a.x, b.y - a.y);
     var scalars_a = [], scalars_b = [];
     Object.keys(projection_a).forEach(function(edge){
-        scalars_a.push(projection_to_scalar(projection_a[edge], axis));
+        scalars_a.push(Util.projection_to_scalar(projection_a[edge], axis));
     });
     Object.keys(projection_b).forEach(function(edge){
-        scalars_b.push(projection_to_scalar(projection_b[edge], axis));
+        scalars_b.push(Util.projection_to_scalar(projection_b[edge], axis));
     });
     var a_min = scalars_a.reduce(function(a,b){ return Math.min(a,b); });
     var a_max = scalars_a.reduce(function(a,b){ return Math.max(a,b); });
