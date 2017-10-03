@@ -104,8 +104,6 @@ const Entity = (function (){
   * Rendering
   */
   function render_box_outline(entity, ctx, dt){
-    ctx.fillStyle = "#2f435A";
-    ctx.fillRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
     ctx.strokeRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
   }
   function render_crosshair(entity, ctx, dt){
@@ -158,7 +156,7 @@ const Entity = (function (){
     ctx.beginPath();
     ctx.lineWidth = 4;
     ctx.moveTo(0,0);
-    ctx.lineTo(entity.resolution_vector.x_after(0, 1), entity.resolution_vector.y_after(0, 1));
+    ctx.lineTo(entity.resolution_vector.x_after(0, 2), entity.resolution_vector.y_after(0, 2));
     ctx.stroke();
   }
   function render_collision_checks(entity, ctx, dt){
@@ -185,11 +183,6 @@ const Entity = (function (){
       ctx.strokeStyle = "#F88402";
       surface = Vector.create( collision.surface_angle, 20 );
       normal = collision.resolution_vector;
-      ctx.moveTo( surface.x_after(collision.intersection_point[0], -1), surface.y_after(collision.intersection_point[1], -1));
-      ctx.lineTo( surface.x_after(collision.intersection_point[0], 1), surface.y_after(collision.intersection_point[1], 1));
-      ctx.moveTo( collision.intersection_point[0], collision.intersection_point[1]);
-      ctx.lineTo( normal.x_after(collision.intersection_point[0], 1), normal.y_after(collision.intersection_point[1], 1));
-      ctx.stroke();
     });
   }
   function render_debug(entity, ctx, dt){
@@ -302,7 +295,7 @@ const Entity = (function (){
       entity.update = function(){ reset(entity) };
       entity.render = function(viewport, ctx, dt){ render(entity, viewport, ctx, dt) };
 
-      entity.check_collision_against = function(other_entity, no_checkback){ check_collision_against(entity, other_entity, no_checkback) };
+      entity.check_collision_against = function(other_entity, no_checkback){ check_collision_against(entity, other_entity, no_checkback)};
       entity.resolve_collision = function(){};
 
       return entity;
