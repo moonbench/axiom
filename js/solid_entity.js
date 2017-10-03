@@ -67,6 +67,8 @@ const SolidEntity = (function(){
     if(a.collision_checks[key] != undefined) return a.collision_checks[key].is_colliding;
     a.collision_checks[key] = {other_entity: b, is_colliding: false};
 
+    if(!a.solid || !b.solid) return false;
+    if(!a.moveable && !b.moveable) return false
     if(!entities_are_close_to_colliding(a,b)) return false;
 
     const axis = [];
@@ -175,6 +177,7 @@ const SolidEntity = (function(){
    * Initialization
    */
   function extend(entity){
+    entity.solid = true;
     entity.check_collision_against = function(other_entity, no_checkback){ check_collision_against(entity, other_entity, no_checkback)};
     const parent_render_debug = entity.render_debug;
     entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt); parent_render_debug(ctx, dt) };

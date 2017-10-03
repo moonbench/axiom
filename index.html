@@ -59,6 +59,8 @@
     world.add_entity(SolidEntity.create(200, 400, 90, 200, Math.PI/4));
     world.add_entity(SolidEntity.create(600, 450, 100, 300, 0));
     world.add_entity(SolidEntity.create(200, 100, 20, 300, 0));
+    world.add_entity(Entity.create(600, 70, 20, 50, 0));
+    world.add_entity(Entity.create(680, 30, 20, 50, 0));
 
     const engine = Engine.create(world, "game_canvas", "fps_meter");
     engine.run();
