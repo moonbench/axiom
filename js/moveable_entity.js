@@ -1,9 +1,9 @@
 "use strict";
 
-var MoveableEntity = (function(){
+const MoveableEntity = (function(){
 
   function acceleration_vector(entity){
-    var vector = Vector.create(0,0);
+    const vector = Vector.create(0,0);
     // TODO modify how much of each component we use when going diagonally
     if(entity.state.forward) vector.add( entity.angle, 3);
     if(entity.state.reverse) vector.add( entity.angle + Math.PI, 3);
@@ -16,8 +16,8 @@ var MoveableEntity = (function(){
     move_to(entity, entity.resolution_vector.x_after(entity.x, 1), entity.resolution_vector.y_after(entity.y, 1));
   }
   function turn_towards(entity, x, y){
-    var angle_to_spot = Util.normalize_angle(Math.atan2(y-entity.y, x - entity.x));
-    var distance = angle_to_spot - entity.angle;
+    const angle_to_spot = Util.normalize_angle(Math.atan2(y-entity.y, x - entity.x));
+    let distance = angle_to_spot - entity.angle;
 
     if(distance > Math.PI){
       distance = (-2*Math.PI)+distance;
@@ -46,7 +46,7 @@ var MoveableEntity = (function(){
       entity.rotated = true;
     }
 
-    var movement_vector = Vector.create(0, 0);
+    const movement_vector = Vector.create(0, 0);
     movement_vector.add_vector( acceleration_vector(entity));
     entity.vector.add_vector(movement_vector);
 
@@ -76,7 +76,7 @@ var MoveableEntity = (function(){
 
   return {
     create: function(world_x, world_y, width, height, angle) {
-      var entity = Entity.create(world_x, world_y, width, height, angle);
+      const entity = Entity.create(world_x, world_y, width, height, angle);
 
       entity.max_rotation_speed = 1;
 
@@ -85,7 +85,7 @@ var MoveableEntity = (function(){
       entity.update = function(dt){ entity.reset(); update(entity, dt); entity.normalize() };
       entity.turn_towards = function(x, y){ turn_towards(entity, x, y) };
 
-      var parent_render = entity.render;
+      const parent_render = entity.render;
       entity.render = function(viewport, ctx, dt){ parent_render(viewport, ctx, dt); render(entity, viewport, ctx, dt) };
       entity.vector = Vector.create(0, 0);
       entity.resolve_collision = function(){ resolve_collision(entity) };

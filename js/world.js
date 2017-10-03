@@ -1,6 +1,6 @@
 "use strict";
 
-var World = (function (){
+const World = (function (){
   function update(world, engine, dt){
     world.player_entities.forEach(function(entity){
       entity.turn_towards(engine.cursor.x, engine.cursor.y);
@@ -32,7 +32,7 @@ var World = (function (){
 
   return {
     create: function(width, height){
-      var world = {
+      const world = {
         width,
         height,
         entities: [],

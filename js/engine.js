@@ -1,6 +1,6 @@
 "use strict";
 
-var Engine = (function(){
+const Engine = (function(){
   /*
   * Helper functions
   */
@@ -46,8 +46,8 @@ var Engine = (function(){
   * User interactions
   */
   function handle_mouse_move(engine, event){
-    var adjusted_x = event.clientX - engine.canvas.getBoundingClientRect().left;
-    var adjusted_y = event.clientY - engine.canvas.getBoundingClientRect().top;
+    const adjusted_x = event.clientX - engine.canvas.getBoundingClientRect().left;
+    const adjusted_y = event.clientY - engine.canvas.getBoundingClientRect().top;
     engine.cursor.move_to(adjusted_x, adjusted_y);
   }
 
@@ -78,7 +78,7 @@ var Engine = (function(){
 
   return {
     create: function(world, canvas_id, fps_meter_id){
-      var engine = {
+      const engine = {
         world,
         fps: 60,
         now: null,
