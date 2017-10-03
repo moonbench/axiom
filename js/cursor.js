@@ -1,3 +1,5 @@
+"use strict";
+
 const Cursor = (function(){
   function move_cursor_to(cursor, x, y){
     cursor.x = x;
