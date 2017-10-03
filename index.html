@@ -43,6 +43,7 @@
   <script type="text/javascript" src="js/meter.js"></script>
   <script type="text/javascript" src="js/viewport.js"></script>
   <script type="text/javascript" src="js/entity.js"></script>
+  <script type="text/javascript" src="js/solid_entity.js"></script>
   <script type="text/javascript" src="js/static_entity.js"></script>
   <script type="text/javascript" src="js/moveable_entity.js"></script>
   <script type="text/javascript" src="js/driveable_entity.js"></script>
@@ -52,7 +53,7 @@
 
   <script type="text/javascript">
     const world = World.create(800, 600);
-    const car = DriveableEntity.create(600, 200, 50, 80, Math.PI);
+    const car = DriveableEntity.extend(MoveableEntity.extend(SolidEntity.create(600, 200, 50, 80, Math.PI)));
     car.is_selected = true;
     world.add_player_entity(car);
 
