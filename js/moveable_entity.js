@@ -73,13 +73,15 @@ const MoveableEntity = (function(){
     ctx.lineTo(entity.vector.x_after(0,1), entity.vector.y_after(0,1));
     ctx.stroke();
   }
-  function render(entity, viewport, ctx, dt){
+  function render(entity, ctx, dt){
     if(entity.debug_level<2) return;
 
-    ctx.save();
-    ctx.translate( viewport.adjusted_x(entity.x), viewport.adjusted_y(entity.y));
+    ctx.fillStyle = "#125372";
+    ctx.fillRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
+
+    ctx.rotate(0-entity.angle);
     draw_velocity_vector(entity, ctx, dt);
-    ctx.restore();
+    ctx.rotate(entity.angle);
   }
 
   return {
@@ -94,7 +96,7 @@ const MoveableEntity = (function(){
       entity.turn_towards = function(x, y){ turn_towards(entity, x, y) };
 
       const parent_render = entity.render;
-      entity.render = function(viewport, ctx, dt){ parent_render(viewport, ctx, dt); render(entity, viewport, ctx, dt) };
+      entity.render = function(ctx, dt){ render(entity, ctx, dt); parent_render(ctx, dt) };
       entity.vector = Vector.create(0, 0);
       entity.resolve_collision = function(){ resolve_collision(entity) };
 

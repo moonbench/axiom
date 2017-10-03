@@ -17,7 +17,11 @@ const World = (function (){
 
 
   function render(world, engine, dt){
-    world.entities.forEach(function(entity){ entity.render(engine.viewport, engine.ctx, dt) });
+    world.entities.forEach(function(entity){
+      entity.pre_render(engine.viewport, engine.ctx, dt);
+      entity.render(engine.ctx, dt);
+      entity.post_render(engine.ctx, dt);
+    });
     world.quadtree.render(engine, engine.ctx, dt);
   }
 

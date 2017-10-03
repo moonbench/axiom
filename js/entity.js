@@ -211,19 +211,22 @@ const Entity = (function (){
 
     render_info_text(entity, ctx, dt);
   }
-  function render(entity, viewport, ctx, dt){
+  function pre_render(entity, viewport, ctx, dt){
     ctx.save();
     ctx.translate( viewport.adjusted_x(entity.x), viewport.adjusted_y(entity.y));
-
-    ctx.strokeStyle = "#20748a";
-    ctx.fillStyle = "#2b4c60";
     ctx.rotate(entity.angle);
-    render_box_outline(entity, ctx, dt);
-    ctx.rotate(0-entity.angle);
-
-    if(entity.debug_level > 0) render_debug(entity, ctx, dt);
-
+  }
+  function post_render(entity, ctx, dt){
+    if(entity.debug_level > 0){
+      ctx.rotate(0-entity.angle);
+      render_debug(entity, ctx, dt);
+    }
     ctx.restore();
+  }
+  function render(entity, ctx, dt){
+    ctx.strokeStyle = "#20748a";
+    console.log(arguments);
+    render_box_outline(entity, ctx, dt);
   };
 
 
@@ -293,7 +296,10 @@ const Entity = (function (){
       entity.reset = function(){ reset(entity) };
       entity.normalize = function(){ normalize(entity) };
       entity.update = function(){ reset(entity) };
-      entity.render = function(viewport, ctx, dt){ render(entity, viewport, ctx, dt) };
+
+      entity.pre_render = function(viewport, ctx, dt){ pre_render(entity, viewport, ctx, dt) };
+      entity.render = function(ctx, dt){ render(entity, ctx, dt) };
+      entity.post_render = function(ctx, dt){ post_render(entity, ctx, dt) };
 
       entity.check_collision_against = function(other_entity, no_checkback){ check_collision_against(entity, other_entity, no_checkback)};
       entity.resolve_collision = function(){};
