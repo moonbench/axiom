@@ -225,7 +225,6 @@ const Entity = (function (){
   }
   function render(entity, ctx, dt){
     ctx.strokeStyle = "#20748a";
-    console.log(arguments);
     render_box_outline(entity, ctx, dt);
   };
 
