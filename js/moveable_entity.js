@@ -2,6 +2,9 @@
 
 const MoveableEntity = (function(){
 
+  /*
+   * Movement
+   */
   function acceleration_vector(entity){
     const vector = Vector.create(0,0);
     // TODO modify how much of each component we use when going diagonally
@@ -57,6 +60,11 @@ const MoveableEntity = (function(){
   }
 
 
+
+
+  /*
+   * Rendering
+   */
   function draw_velocity_vector(entity, ctx, dt){
     ctx.strokeStyle = "#e3c440";
     ctx.lineWidth = 3;
