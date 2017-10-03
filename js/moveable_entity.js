@@ -61,7 +61,6 @@ const MoveableEntity = (function(){
 
 
 
-
   /*
    * Rendering
    */
@@ -83,6 +82,7 @@ const MoveableEntity = (function(){
     draw_velocity_vector(entity, ctx, dt);
     ctx.rotate(entity.angle);
   }
+
 
 
   /*
