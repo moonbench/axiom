@@ -84,23 +84,30 @@ const MoveableEntity = (function(){
     ctx.rotate(entity.angle);
   }
 
+
+  /*
+   * Initalization
+   */
+  function extend(entity){
+    entity.max_rotation_speed = 1;
+
+    entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
+
+    entity.update = function(dt){ entity.reset(); update(entity, dt); entity.normalize() };
+    entity.turn_towards = function(x, y){ turn_towards(entity, x, y) };
+
+    const parent_render = entity.render;
+    entity.render = function(ctx, dt){ render(entity, ctx, dt); parent_render(ctx, dt) };
+    entity.vector = Vector.create(0, 0);
+    entity.resolve_collision = function(){ resolve_collision(entity) };
+
+    return entity;
+  }
+
   return {
     create: function(world_x, world_y, width, height, angle) {
-      const entity = Entity.create(world_x, world_y, width, height, angle);
-
-      entity.max_rotation_speed = 1;
-
-      entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
-
-      entity.update = function(dt){ entity.reset(); update(entity, dt); entity.normalize() };
-      entity.turn_towards = function(x, y){ turn_towards(entity, x, y) };
-
-      const parent_render = entity.render;
-      entity.render = function(ctx, dt){ render(entity, ctx, dt); parent_render(ctx, dt) };
-      entity.vector = Vector.create(0, 0);
-      entity.resolve_collision = function(){ resolve_collision(entity) };
-
-      return entity;
-    }
+      return extend(Entity.create(world_x, world_y, width, height, angle));
+    },
+    extend,
   }
 })();

@@ -9,11 +9,16 @@ const DriveableEntity = (function(){
     else return;
     key.preventDefault();
   }
+
+  function extend(entity){
+    entity.handle_key = function(key, pressed){ handle_key(entity, key, pressed) };
+    return entity;
+  }
+
   return {
     create: function(world_x, world_y, width, height, angle) {
-      const entity = MoveableEntity.create(world_x, world_y, width, height, angle);
-      entity.handle_key = function(key, pressed){ handle_key(entity, key, pressed) };
-      return entity;
-    }
+      return extend(MoveableEntity.create(world_x, world_y, width, height, angle));
+    },
+    extend,
   }
 })();
