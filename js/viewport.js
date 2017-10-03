@@ -1,6 +1,6 @@
 "use strict";
 
-var Viewport = (function() {
+const Viewport = (function() {
   /*
   * Rendering
   */
@@ -55,7 +55,7 @@ var Viewport = (function() {
   */
   return {
     create: function(canvas){
-      var viewport = {
+      const viewport = {
         width: canvas.width,
         height: canvas.height,
         x: 0,

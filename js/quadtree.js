@@ -1,23 +1,23 @@
 "use strict";
 
-var QuadTree = (function(){
+const QuadTree = (function(){
 
   // The quadtree is built out of nodes
-  var Node = (function(){
-    var MAX_ENTITIES_PER_NODE = 1;
-    var MIN_AREA_PER_NODE = 1000;
-    var TOP_LEFT = 0, TOP_RIGHT = 1, BOTTOM_LEFT = 2, BOTTOM_RIGHT = 3;
+  const Node = (function(){
+    const MAX_ENTITIES_PER_NODE = 1;
+    const MIN_AREA_PER_NODE = 1000;
+    const TOP_LEFT = 0, TOP_RIGHT = 1, BOTTOM_LEFT = 2, BOTTOM_RIGHT = 3;
 
     /*
      * Modify the node's contents
      */
     function indexes_of_children_overlapping(entity, node){
-      var children_touching = [];
-      var node_mid_x = node.x + node.width/2,
+      const children_touching = [];
+      const node_mid_x = node.x + node.width/2,
           node_mid_y = node.y + node.height/2;
-      var entity_max_x = entity.x + entity.max.x,
+      const entity_max_x = entity.x + entity.max.x,
           entity_max_y = entity.y + entity.max.y;
-      var entity_min_x = entity.x + entity.min.x,
+      const entity_min_x = entity.x + entity.min.x,
           entity_min_y = entity.y + entity.min.y;
 
       if(entity_min_x <= node_mid_x && entity_max_x > node.x){
@@ -37,8 +37,8 @@ var QuadTree = (function(){
     }
 
     function split_node(node){
-      var half_width = node.width/2;
-      var half_height = node.height/2;
+      const half_width = node.width/2;
+      const half_height = node.height/2;
 
       node.children[TOP_LEFT] = Node.create(node.x, node.y, half_width, half_height);
       node.children[TOP_RIGHT] = Node.create(node.x + half_width, node.y, half_width, half_height);
@@ -119,7 +119,7 @@ var QuadTree = (function(){
 
     return {
       create: function(x, y, width, height){
-        var node = {
+        const node = {
           x,
           y,
           width,
@@ -143,7 +143,7 @@ var QuadTree = (function(){
   // Tree is built from a root node
   return {
     create: function(world){
-      var tree = {};
+      const tree = {};
 
       tree.add = function(entity){ tree.root.add(entity) }
       tree.reset = function(){ tree.root = Node.create(0, 0, world.width, world.height) }

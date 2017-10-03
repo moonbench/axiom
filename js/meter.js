@@ -1,9 +1,9 @@
 "use strict";
 
-var Meter = (function(){
+const Meter = (function(){
   return {
     create: function(engine, div_id ){
-      var meter = new FPSMeter(document.getElementById(div_id), {
+      const meter = new FPSMeter(document.getElementById(div_id), {
         interval:  100,
         smoothing: 10,
         show:      'fps',

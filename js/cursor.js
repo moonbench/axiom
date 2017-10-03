@@ -1,4 +1,4 @@
-var Cursor = (function(){
+const Cursor = (function(){
   function move_cursor_to(cursor, x, y){
     cursor.x = x;
     cursor.y = y;
@@ -17,7 +17,7 @@ var Cursor = (function(){
 
   return {
     create: function(x, y){
-      var cursor = {
+      const cursor = {
         x,
         y,
         pressed: false
