@@ -65,22 +65,21 @@ const MoveableEntity = (function(){
    * Rendering
    */
   function draw_velocity_vector(entity, ctx, dt){
+    if(!entity.vector.magnitude) return;
+
+    ctx.rotate(0-entity.angle);
     ctx.strokeStyle = "#e3c440";
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(0,0);
     ctx.lineTo(entity.vector.x_after(0,1), entity.vector.y_after(0,1));
     ctx.stroke();
+    ctx.rotate(entity.angle);
   }
+
   function render(entity, ctx, dt){
     if(entity.debug_level<2) return;
-
-    ctx.fillStyle = "#125372";
-    ctx.fillRect(-entity.height/2, -entity.width/2, entity.height, entity.width);
-
-    ctx.rotate(0-entity.angle);
     draw_velocity_vector(entity, ctx, dt);
-    ctx.rotate(entity.angle);
   }
 
 
@@ -90,7 +89,7 @@ const MoveableEntity = (function(){
    */
   function extend(entity){
     entity.moveable = true;
-    entity.max_rotation_speed = 1;
+    entity.max_rotation_speed = 1.6;
 
     entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
 

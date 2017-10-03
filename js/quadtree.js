@@ -82,16 +82,20 @@ const QuadTree = (function(){
      * Rendering
      */
     function draw_debug_text(node, ctx, dt){
+      if(node.debug_level<4) return;
       ctx.strokeText("C: " + node.children.length, node.width/2, node.height/2);
       ctx.strokeText("I: " + node.items.length, node.width/2, node.height/2+10);
     }
     function draw_quad_node(engine, node, ctx, dt){
+      ctx.strokeStyle = "#111122";
+      ctx.strokeRect(0, 0, node.width, node.height);
+
+      if(node.debug_level<2) return;
       ctx.fillStyle = "rgba(100, 100, 200, 0.08)";
       ctx.fillRect(0, 0, node.width, node.height);
-      ctx.strokeStyle = "#111111";
-      ctx.strokeRect(0, 0, node.width, node.height);
     }
     function draw_debug_links(node, ctx, dt){
+      if(node.debug_level<3) return;
       ctx.beginPath();
       node.items.forEach(function(item){
         ctx.moveTo(node.width/2, node.height/2);
@@ -100,19 +104,19 @@ const QuadTree = (function(){
       ctx.stroke();
     }
     function render(engine, node, ctx, dt){
-      if(node.debug_level >= 1){
-        ctx.save();
-        ctx.translate( engine.viewport.adjusted_x(node.x), engine.viewport.adjusted_y(node.y));
-        draw_quad_node(engine, node, ctx, dt);
-        ctx.strokeStyle = "#2b97b4";
-        if(node.debug_level>=2){
-          draw_debug_links(node, ctx, dt);
-        }
-        if(node.debug_level>=3){
-          draw_debug_text(node, ctx, dt);
-        }
-        ctx.restore();
-      }
+      if(node.debug_level <1 ) return;
+
+      ctx.save();
+      ctx.translate( engine.viewport.adjusted_x(node.x), engine.viewport.adjusted_y(node.y));
+
+      // level 1 & 2
+      draw_quad_node(engine, node, ctx, dt);
+      // level 3
+      draw_debug_links(node, ctx, dt);
+      // level 4
+      draw_debug_text(node, ctx, dt);
+
+      ctx.restore();
       node.children.forEach(function(child){ render(engine, child, ctx, dt) });
     }
 
@@ -127,7 +131,7 @@ const QuadTree = (function(){
           items: [],
           children: [],
         }
-        node.debug_level = 0;
+        node.debug_level = 2;
 
         node.run_collision_checks = function(){ run_collision_checks(node) }
         node.add = function(entity){ add_entity_to_node(entity, node) }
