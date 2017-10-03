@@ -44,7 +44,6 @@
   <script type="text/javascript" src="js/viewport.js"></script>
   <script type="text/javascript" src="js/entity.js"></script>
   <script type="text/javascript" src="js/solid_entity.js"></script>
-  <script type="text/javascript" src="js/static_entity.js"></script>
   <script type="text/javascript" src="js/moveable_entity.js"></script>
   <script type="text/javascript" src="js/driveable_entity.js"></script>
   <script type="text/javascript" src="js/quadtree.js"></script>
@@ -57,9 +56,9 @@
     car.is_selected = true;
     world.add_player_entity(car);
 
-    world.add_entity(StaticEntity.create(200, 400, 90, 200, Math.PI/4));
-    world.add_entity(StaticEntity.create(600, 450, 100, 300, 0));
-    world.add_entity(StaticEntity.create(200, 100, 20, 300, 0));
+    world.add_entity(SolidEntity.create(200, 400, 90, 200, Math.PI/4));
+    world.add_entity(SolidEntity.create(600, 450, 100, 300, 0));
+    world.add_entity(SolidEntity.create(200, 100, 20, 300, 0));
 
     const engine = Engine.create(world, "game_canvas", "fps_meter");
     engine.run();
