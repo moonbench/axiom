@@ -89,6 +89,7 @@ const MoveableEntity = (function(){
    * Initalization
    */
   function extend(entity){
+    entity.moveable = true;
     entity.max_rotation_speed = 1;
 
     entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
