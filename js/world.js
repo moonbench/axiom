@@ -3,7 +3,7 @@
 const World = (function (){
   function update(world, engine, dt){
     world.player_entities.forEach(function(entity){
-      entity.turn_towards(engine.cursor.x, engine.cursor.y);
+      entity.turn_towards(engine.viewport.x_to_world(engine.cursor.x), engine.viewport.y_to_world(engine.cursor.y));
     });
 
     world.quadtree.reset();
