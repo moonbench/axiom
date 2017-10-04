@@ -90,14 +90,18 @@ const SolidEntity = (function(){
     if(axis_distance[axis.length-1] === false) return false;
 
     // We are overlapping
+    let resolution_vector = Vector.create(0,0);
     axis_distance.forEach(function(distance, index){
-      if((distance !== true && distance != 0) && (!a.resolution_vector ||  Math.abs(distance) < Math.abs(a.resolution_vector.magnitude))){
-        if(index == 0) a.resolution_vector = Vector.create(a.angle, distance);
-        else if(index == 1) a.resolution_vector = Vector.create(a.angle-Math.PI/2, distance);
-        else if(index == 2) a.resolution_vector = Vector.create(b.angle+Math.PI, distance);
-        else if(index == 3) a.resolution_vector = Vector.create(b.angle+Math.PI/2, distance);
+      if((distance !== true && distance != 0) && (resolution_vector.magnitude == 0 || Math.abs(distance) < Math.abs(resolution_vector.magnitude))){
+        if(index == 0) resolution_vector = Vector.create(a.angle, distance);
+        else if(index == 1) resolution_vector = Vector.create(a.angle-Math.PI/2, distance);
+        else if(index == 2) resolution_vector = Vector.create(b.angle+Math.PI, distance);
+        else if(index == 3) resolution_vector = Vector.create(b.angle+Math.PI/2, distance);
       }
     });
+    if(!a.resolution_vector) a.resolution_vector = Vector.create(0,0);
+    a.resolution_vector.add_vector(resolution_vector);
+    if(!b.resolution_vector) b.resolution_vector = Vector.create(a.resolution_vector.angle, -a.resolution_vector.magnitude)
 
     if(!no_checkback) b.check_collision_against(a, true);
     a.collision_checks[key].is_colliding = true;

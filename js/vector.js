@@ -7,9 +7,11 @@ const Vector = (function(){
     const x2 = new_vector.x_after(x1, 1), y2 = new_vector.y_after(y1, 1);
     vector.magnitude = Math.sqrt( Math.pow(y2, 2) + Math.pow(x2, 2));
     vector.angle = Math.atan2( y2, x2 );
+    return vector;
   }
   function add( vector, angle, magnitude ){
     add_vector( vector, Vector.create(angle, magnitude));
+    return vector;
   }
 
   return {
