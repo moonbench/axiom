@@ -10,7 +10,7 @@ const World = (function (){
     world.entities.forEach(function(entity){
       entity.resolve_collision();
       entity.update(dt);
-      world.quadtree.add(entity);
+      if(entity.solid) world.quadtree.add(entity);
     });
     world.quadtree.run_collision_checks();
   }
