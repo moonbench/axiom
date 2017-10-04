@@ -18,6 +18,8 @@ const World = (function (){
 
   function render(world, engine, dt){
     world.entities.forEach(function(entity){
+      if(!engine.viewport.within(entity.x+entity.min.x, entity.y+entity.min.y, entity.x+entity.max.x, entity.y+entity.max.y)) return;
+
       entity.pre_render(engine.viewport, engine.ctx, dt);
       entity.render(engine.ctx, dt);
       entity.post_render(engine.ctx, dt);
