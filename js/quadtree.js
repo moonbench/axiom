@@ -104,6 +104,7 @@ const QuadTree = (function(){
       ctx.stroke();
     }
     function render(engine, node, ctx, dt){
+      if(!engine.viewport.within(node.x, node.y, node.x + node.width, node.y + node.height)) return;
       if(node.debug_level <1 ) return;
 
       ctx.save();

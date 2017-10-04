@@ -6,7 +6,7 @@ const Viewport = (function() {
   */
   function render_background(viewport, ctx, dt){
     ctx.fillStyle = "#111111";
-    ctx.fillRect(0, 0, viewport.width, viewport.height);
+    ctx.fillRect( 0, 0, viewport.width, viewport.height );
   }
   function render_foreground(viewport, ctx, dt){
     ctx.strokeStyle = "#3f4653";
@@ -27,10 +27,16 @@ const Viewport = (function() {
     if(world_y < viewport.limits.scrolling.min_y){ viewport.y = viewport.limits.scrolling.min_y - viewport.height/2; }
     else if(world_y >= viewport.limits.scrolling.max_y){ viewport.y = viewport.limits.scrolling.max_y - viewport.height/2; }
     else { viewport.y = world_y - viewport.height/2; }
-
-
   }
 
+
+  /*
+   * Queries
+   */
+  function within(viewport, min_x, min_y, max_x, max_y){
+    return viewport.adjusted_x(min_x) < viewport.width && viewport.adjusted_x(max_x) > 0 &&
+      viewport.adjusted_y(min_y) < viewport.height && viewport.adjusted_y(max_y) > 0;
+  }
 
   /*
   * Massaging
@@ -76,6 +82,8 @@ const Viewport = (function() {
 
       viewport.render_background = function(ctx, dt){ render_background( viewport, ctx, dt ); };
       viewport.render_foreground = function(ctx, dt){ render_foreground( viewport, ctx, dt ); };
+
+      viewport.within = function(min_x, min_y, max_x, max_y){ return within(viewport, min_x, min_y, max_x, max_y) };
 
       return viewport;
     }
