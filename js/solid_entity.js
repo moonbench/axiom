@@ -52,11 +52,10 @@ const SolidEntity = (function(){
     const b_min = scalars_b.reduce(function(a,b){ return Math.min(a,b); });
     const b_max = scalars_b.reduce(function(a,b){ return Math.max(a,b); });
 
+    const denom = Math.max(Math.abs(axis[0]), Math.abs(axis[1]), 1);
     if(b_max < a_max && b_max > a_min){
-      const denom = Math.abs(axis[0]) > 0 ? Math.abs(axis[0]) : Math.abs(axis[1]);
       return (b_max - a_min)/denom;
     } else if(b_min > a_min && b_min < a_max){
-      const denom = Math.abs(axis[1]) > 0 ? Math.abs(axis[1]) : Math.abs(axis[0]);
       return -(a_max - b_min)/denom;
     }
     return b_max > a_min && b_min < a_max;
