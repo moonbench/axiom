@@ -100,7 +100,8 @@ const SolidEntity = (function(){
     });
     if(!a.resolution_vector) a.resolution_vector = Vector.create(0,0);
     a.resolution_vector.add_vector(resolution_vector);
-    if(!b.resolution_vector) b.resolution_vector = Vector.create(a.resolution_vector.angle, -a.resolution_vector.magnitude)
+    if(!b.resolution_vector) b.resolution_vector = Vector.create(a.resolution_vector.angle, -a.resolution_vector.magnitude);
+    if(a.vector) a.vector.angle = Math.atan2(Math.sin(a.resolution_vector.angle), Math.cos(a.resolution_vector.angle));
 
     if(!no_checkback) b.check_collision_against(a, true);
     a.collision_checks[key].is_colliding = true;
