@@ -36,6 +36,12 @@ const World = (function (){
     world.entities.push(entity);
   }
 
+  function handle_mouse_button(world, event, pressed){
+    world.player_entities.forEach(function(entity){
+      if(entity.handle_mouse_button) entity.handle_mouse_button(world, event, pressed);
+    });
+  }
+
   return {
     create: function(width, height){
       const world = {
@@ -51,6 +57,8 @@ const World = (function (){
 
       world.update = function(engine, dt){ update(world, engine, dt); };
       world.render = function(engine, dt){ render(world, engine, dt); };
+
+      world.handle_mouse_button = function(event, pressed){ handle_mouse_button(world, event, pressed) };
 
       return world;
     }

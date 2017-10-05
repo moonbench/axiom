@@ -59,6 +59,7 @@ const Engine = (function(){
   }
   function handle_mouse_button(engine, event, pressed){
     engine.cursor.set_pressed(pressed);
+    engine.world.handle_mouse_button(event, pressed);
   }
 
 
