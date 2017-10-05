@@ -7,11 +7,15 @@ const World = (function (){
     });
 
     world.quadtree.reset();
-    world.entities.forEach(function(entity){
+    world.entities = world.entities.map(function(entity){
       entity.resolve_collision();
       entity.update(dt);
       if(entity.solid) world.quadtree.add(entity);
+      return entity;
+    }).filter(function(entity){
+      return entity.dead == false;
     });
+
     world.quadtree.run_collision_checks();
   }
 
