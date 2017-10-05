@@ -132,7 +132,7 @@ const QuadTree = (function(){
           items: [],
           children: [],
         }
-        node.debug_level = 2;
+        node.debug_level = 0;
 
         node.run_collision_checks = function(){ run_collision_checks(node) }
         node.add = function(entity){ add_entity_to_node(entity, node) }
