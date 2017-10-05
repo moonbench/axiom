@@ -67,7 +67,7 @@ const SolidEntity = (function(){
     a.collision_checks[key] = {other_entity: b, is_colliding: false};
 
     if(!a.solid || !b.solid) return false;
-    if(!a.moveable && !b.moveable) return false
+    if(!a.moveable && !b.moveable) return false;
     if(!entities_are_close_to_colliding(a,b)) return false;
 
     const axis = [];
@@ -168,6 +168,7 @@ const SolidEntity = (function(){
     render_collisions(entity, ctx, dt);
     render_resolution_vector(entity, ctx, dt);
 
+    if(entity.debug_level<2) return;
     ctx.lineWidth = 1;
     ctx.strokeStyle = entity.something_within_aabb ? "#D17C34" : "#308311";
     render_bounding_box(entity, ctx, dt);
