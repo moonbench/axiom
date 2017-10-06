@@ -7,7 +7,10 @@ const World = (function (){
     });
 
     world.quadtree.reset();
-    world.entities = world.entities.map(function(entity){
+    const pending = world.pending_addition;
+    world.pending_addition = [];
+
+    world.entities = world.entities.concat(pending).map(function(entity){
       entity.resolve_collision();
       entity.update(dt);
       if(entity.solid) world.quadtree.add(entity);
@@ -33,16 +36,17 @@ const World = (function (){
 
 
   function add_player_entity_to_world(entity, world){
-    world.entities.push(entity);
+    add_entity_to_world(entity, world);
     world.player_entities.push(entity);
   }
   function add_entity_to_world(entity, world){
-    world.entities.push(entity);
+    entity.world = world;
+    world.pending_addition.push(entity);
   }
 
   function handle_mouse_button(world, event, pressed){
     world.player_entities.forEach(function(entity){
-      if(entity.handle_mouse_button) entity.handle_mouse_button(world, event, pressed);
+      if(entity.handle_mouse_button) entity.handle_mouse_button(event, pressed);
     });
   }
 
@@ -53,6 +57,7 @@ const World = (function (){
         height,
         entities: [],
         player_entities: [],
+        pending_addition: [],
       };
       world.quadtree = QuadTree.create(world);
 
