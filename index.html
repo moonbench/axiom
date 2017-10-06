@@ -49,6 +49,7 @@
   <script type="text/javascript" src="js/driveable_entity.js"></script>
   <script type="text/javascript" src="js/shooting_entity.js"></script>
   <script type="text/javascript" src="js/missile_entity.js"></script>
+  <script type="text/javascript" src="js/gun.js"></script>
   <script type="text/javascript" src="js/sprite.js"></script>
   <script type="text/javascript" src="js/quadtree.js"></script>
   <script type="text/javascript" src="js/world.js"></script>
@@ -58,9 +59,9 @@
     const world = World.create(1600, 1200);
 
     const asset_depot = AssetDepot.create();
-    asset_depot.add_image("test", "assets/test.png");
+    asset_depot.add_image("test", "assets/fighter.png");
 
-    const car = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(Sprite.create(600, 200, 50, 80, Math.PI, asset_depot.images["test"])))));
+    const car = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(Sprite.create(600, 200, 80, 85, Math.PI, asset_depot.images["test"])))));
     car.is_selected = true;
     world.add_player_entity(car);
 
