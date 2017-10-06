@@ -126,7 +126,7 @@ const Entity = (function (){
   * Public methods
   */
   return {
-    create: function(x, y, width, height, angle){
+    create: function(x = null, y = null, width = 0, height = 0, angle = 0){
       const entity = {
         x,
         y,
