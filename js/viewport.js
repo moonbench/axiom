@@ -71,7 +71,6 @@ const Viewport = (function() {
         world,
       };
       update_limits(viewport);
-      console.log(viewport.limits);
 
       viewport.adjusted_x = function(world_x){ return (world_x - viewport.x) };
       viewport.adjusted_y = function(world_y){ return (world_y - viewport.y) };
