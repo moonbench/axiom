@@ -15,6 +15,11 @@ const MissileEntity = (function(){
     return true;
   }
 
+  function resolve_collision(entity){
+    if(!entity.resolution_vector) return;
+    entity.dead = true;
+  }
+
   function extend(entity, velocity){
     entity.is_projectile = true;
     entity.state.forward = true;
@@ -32,6 +37,8 @@ const MissileEntity = (function(){
       if(check_collision_against_precheck(entity, other_entity, no_checkback))
         parent_check_collision_against(other_entity, no_checkback)
     };
+
+    entity.resolve_collision = function(){ resolve_collision(entity) };
 
     return entity;
   }
