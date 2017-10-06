@@ -2,17 +2,18 @@
 
 const ShootingEntity = (function(){
   function update(entity, dt){
-    if(entity.time_since_last_shot < entity.time_between_shots)
+    if(entity.time_since_last_shot < entity.time_between_shots){
       entity.time_since_last_shot += dt;
+    }
+    if((entity.time_since_last_shot >= entity.time_between_shots) && entity.state.shooting)
+      shoot(entity);
   }
 
-  function shoot(entity, world){
-    if(entity.time_since_last_shot < entity.time_between_shots) return;
-
+  function shoot(entity){
     for(var i = 0; i < entity.projectiles_per_shot; i++){
       const shot = MissileEntity.create(entity.x, entity.y, 10, 100, entity.angle);
       shot.parent = entity;
-      world.add_entity(shot);
+      entity.world.add_entity(shot);
     }
     entity.time_since_last_shot = 0;
   }
@@ -28,8 +29,11 @@ const ShootingEntity = (function(){
     entity.time_between_shots = 0.05;
     entity.time_since_last_shot = entity.time_between_shots;
 
-    entity.handle_mouse_button = function(world, event, pressed){ 
-      if(pressed) shoot(entity, world);
+    entity.state = entity.state || {};
+    entity.state.shooting = false;
+
+    entity.handle_mouse_button = function(event, pressed){
+      entity.state.shooting = pressed;
     };
 
     const parent_update = entity.update;
