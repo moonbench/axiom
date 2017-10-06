@@ -162,18 +162,19 @@ const SolidEntity = (function(){
     ctx.setLineDash([]);
   }
   function render_debug(entity, ctx, dt){
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "#42a529";
-    render_collision_checks(entity, ctx, dt);
-    render_collisions(entity, ctx, dt);
-    render_resolution_vector(entity, ctx, dt);
-
     if(entity.debug_level<2) return;
     ctx.lineWidth = 1;
     ctx.strokeStyle = entity.something_within_aabb ? "#D17C34" : "#308311";
     render_bounding_box(entity, ctx, dt);
     ctx.strokeStyle = entity.something_within_radius ? "#D17C34" : "#42a529";
     render_boundary_circle(entity, ctx, dt);
+
+    if(entity.debug_level<3) return;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#42a529";
+    render_collision_checks(entity, ctx, dt);
+    render_collisions(entity, ctx, dt);
+    render_resolution_vector(entity, ctx, dt);
   }
 
 
