@@ -27,6 +27,7 @@ const Gun = (function(){
     if(gun.parent.vector) shot.vector.magnitude += gun.parent.vector.magnitude;
     shot.parent = gun.parent;
     gun.parent.world.add_entity(shot);
+    gun.parent.world.engine.audio.play("gun");
   }
 
   return {
