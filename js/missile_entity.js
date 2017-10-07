@@ -21,6 +21,7 @@ const MissileEntity = (function(){
   }
 
   function do_damage(entity, other_entity){
+    entity.world.engine.audio.play("hit");
     if(other_entity.inflict_damage) other_entity.inflict_damage(25);
   }
 

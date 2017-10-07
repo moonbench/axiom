@@ -97,6 +97,7 @@ const Engine = (function(){
       engine.meter = Meter.create(engine, fps_meter_id);
       engine.viewport = Viewport.create(engine.canvas, engine.world);
       engine.cursor = Cursor.create(engine.viewport.width/2, engine.viewport.height/2);
+      engine.audio = AudioEmitter.create();
 
       add_user_inputs(engine);
 
@@ -105,6 +106,8 @@ const Engine = (function(){
           draw_frame(engine)
         })
       };
+
+      world.engine = engine;
 
       return engine;
     }

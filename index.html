@@ -54,6 +54,7 @@
   <script type="text/javascript" src="js/sprite.js"></script>
   <script type="text/javascript" src="js/quadtree.js"></script>
   <script type="text/javascript" src="js/world.js"></script>
+  <script type="text/javascript" src="js/audio_emitter.js"></script>
   <script type="text/javascript" src="js/engine.js"></script>
 
   <script type="text/javascript">
@@ -85,6 +86,17 @@
 
     const engine = Engine.create(world, "game_canvas", "fps_meter");
     engine.run();
+    engine.audio.add_to_group("bg", "assets/bg.mp3");
+    engine.audio.play("bg");
+    engine.audio.add_to_group("gun", "assets/laser1.mp3");
+    engine.audio.add_to_group("gun", "assets/laser2.mp3");
+    engine.audio.add_to_group("gun", "assets/laser3.mp3");
+    engine.audio.add_to_group("gun", "assets/laser4.mp3");
+    engine.audio.add_to_group("gun", "assets/laser5.mp3");
+    engine.audio.add_to_group("hit", "assets/bang1.mp3");
+    engine.audio.add_to_group("hit", "assets/bang2.mp3");
+    engine.audio.add_to_group("hit", "assets/bang3.mp3");
+    engine.audio.add_to_group("hit", "assets/bang4.mp3");
   </script>
 </body>
 </html>
