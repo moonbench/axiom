@@ -4,6 +4,7 @@ const Gun = (function(){
 
   function update(gun, dt){
     if(gun.time_since_last_shot <= gun.time_between_shots) gun.time_since_last_shot += dt;
+    if(gun.time_since_last_shot >= gun.time_between_shots) gun.shots_this_burst = 0;
 
     if(gun.state.shooting){
       if(gun.shots_this_burst < gun.projectiles_per_burst){
@@ -17,7 +18,6 @@ const Gun = (function(){
         }
       } else if(gun.time_since_last_shot >= gun.time_between_shots){
         gun.shots_this_burst = 0;
-        gun.time_since_last_shot += dt;
       }
     }
   }

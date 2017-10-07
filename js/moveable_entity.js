@@ -56,7 +56,7 @@ const MoveableEntity = (function(){
     if(entity.vector.magnitude <= 0.1) entity.vector.magnitude = 0;
     if(entity.vector.magnitude <= 0) return;
     move_to(entity, entity.vector.x_after(entity.x, dt), entity.vector.y_after(entity.y, dt));
-    entity.vector.magnitude -= (entity.vector.magnitude * dt);
+    entity.vector.magnitude -= (entity.vector.magnitude * dt)/2;
   }
 
 
