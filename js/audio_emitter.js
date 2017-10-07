@@ -4,10 +4,7 @@ const AudioEmitter = (function(){
 
   const Group = (function(){
     function add_sound(group, sound){
-      const element = document.createElement("audio");
-      element.src = sound;
-      element.volume = 0.2;
-      group.sounds.push(element);
+      group.sounds.push(sound);
       group.index_queue.push( group.sounds.length-1 );
     }
 
