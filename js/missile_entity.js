@@ -20,6 +20,10 @@ const MissileEntity = (function(){
     entity.dead = true;
   }
 
+  function do_damage(entity, other_entity){
+    if(other_entity.inflict_damage) other_entity.inflict_damage(25);
+  }
+
   function extend(entity, velocity){
     entity.is_projectile = true;
     entity.state.forward = true;
@@ -35,7 +39,11 @@ const MissileEntity = (function(){
     const parent_check_collision_against = entity.check_collision_against;
     entity.check_collision_against = function(other_entity, no_checkback){
       if(check_collision_against_precheck(entity, other_entity, no_checkback))
-        parent_check_collision_against(other_entity, no_checkback)
+        if(parent_check_collision_against(other_entity, no_checkback)){
+          do_damage(entity, other_entity)
+          return true;
+        }
+      return false;
     };
 
     entity.resolve_collision = function(){ resolve_collision(entity) };

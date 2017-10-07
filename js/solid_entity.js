@@ -101,7 +101,10 @@ const SolidEntity = (function(){
     if(!a.resolution_vector) a.resolution_vector = Vector.create(0,0);
     a.resolution_vector.add_vector(resolution_vector);
     if(!b.resolution_vector) b.resolution_vector = Vector.create(a.resolution_vector.angle, -a.resolution_vector.magnitude);
-    if(a.vector) a.vector.angle = Math.atan2(Math.sin(a.resolution_vector.angle), Math.cos(a.resolution_vector.angle));
+    if(a.vector){
+      a.vector.magnitude = a.vector.magnitude/2;
+      a.vector.angle = Math.atan2(Math.sin(a.resolution_vector.angle), Math.cos(a.resolution_vector.angle));
+    }
 
     if(!no_checkback) b.check_collision_against(a, true);
     a.collision_checks[key].is_colliding = true;
@@ -184,7 +187,7 @@ const SolidEntity = (function(){
    */
   function extend(entity){
     entity.solid = true;
-    entity.check_collision_against = function(other_entity, no_checkback){ check_collision_against(entity, other_entity, no_checkback)};
+    entity.check_collision_against = function(other_entity, no_checkback){ return check_collision_against(entity, other_entity, no_checkback)};
     const parent_render_debug = entity.render_debug;
     entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt); parent_render_debug(ctx, dt) };
     return entity;
