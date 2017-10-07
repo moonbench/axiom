@@ -4,9 +4,8 @@ const Viewport = (function() {
   /*
   * Rendering
   */
-  function render_background(viewport, ctx, dt){
-    ctx.fillStyle = "#111111";
-    ctx.fillRect( 0, 0, viewport.width, viewport.height );
+  function clear(viewport, ctx, dt){
+    ctx.clearRect( 0, 0, viewport.width, viewport.height );
   }
   function render_foreground(viewport, ctx, dt){
     ctx.strokeStyle = "#3f4653";
@@ -79,7 +78,7 @@ const Viewport = (function() {
 
       viewport.center_on = function(world_x, world_y){ center_on(viewport, world_x, world_y) };
 
-      viewport.render_background = function(ctx, dt){ render_background( viewport, ctx, dt ); };
+      viewport.clear = function(ctx, dt){ clear( viewport, ctx, dt ); };
       viewport.render_foreground = function(ctx, dt){ render_foreground( viewport, ctx, dt ); };
 
       viewport.within = function(min_x, min_y, max_x, max_y){ return within(viewport, min_x, min_y, max_x, max_y) };
