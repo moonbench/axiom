@@ -17,7 +17,7 @@ const Engine = (function(){
     engine.viewport.center_on(engine.world.player_entities[0].x, engine.world.player_entities[0].y);
   }
   function render(engine, dt){
-    engine.viewport.render_background(engine.ctx, engine.remainder);
+    engine.viewport.clear(engine.ctx, engine.remainder);
     engine.world.render(engine, dt);
     engine.cursor.render( engine.ctx, dt );
     engine.viewport.render_foreground( engine.ctx, dt );

@@ -9,7 +9,7 @@ const AudioEmitter = (function(){
     }
 
     function play_one(group){
-      const index = group.index_queue.pop();
+      const index = group.index_queue.shift();
       if(index == undefined) return;
 
       group.sounds[index].onended = function(){ group.index_queue.push(index) };
