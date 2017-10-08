@@ -13,7 +13,7 @@ const Engine = (function(){
   * Game loop
   */
   function update(engine, dt){
-    engine.world.update(dt);    
+    engine.world.update(dt);
   }
   function render(engine, dt){
     engine.viewport.clear(engine.ctx, engine.remainder);
