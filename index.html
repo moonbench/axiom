@@ -73,7 +73,7 @@
       world.add_entity(DamageableEntity.extend(
         MoveableEntity.extend(
           SolidEntity.extend(
-            Sprite.create(300+Math.random()*200, 600+Math.random()*200, 40, 70, Math.random()*Math.PI*2, asset_depot.images["ship1"])
+            Sprite.create(300+Math.random()*400, 600+Math.random()*500, 40, 70, Math.random()*Math.PI*2, asset_depot.images["ship1"])
             )
           )
         )
@@ -103,8 +103,11 @@
     asset_depot.add_image("ship2", "assets/ship2.png");
     world.add_entity(Sprite.create(1200, 1000, 500, 900, 4, asset_depot.images["ship2"]), 40);
 
-        asset_depot.add_image("ship2", "assets/ship2.png");
+    asset_depot.add_image("ship2", "assets/ship2.png");
     world.add_entity( Sprite.create(500, 900, 400, 800, 6, asset_depot.images["ship2"]), 20);
+
+    asset_depot.add_image("ship2", "assets/ship2.png");
+    world.add_entity( Sprite.create(1200, 1500, 600, 1000, 2.5, asset_depot.images["ship2"]), 120);
 
     asset_depot.add_image("planet", "assets/planet.jpg");
     const planet = Sprite.create(world.width/2, world.height/2, world.height, world.width*1.2, 0, asset_depot.images["planet"]);
