@@ -33,8 +33,9 @@ const Viewport = (function() {
    * Queries
    */
   function within(viewport, min_x, min_y, max_x, max_y){
-    return viewport.adjusted_x(min_x) < viewport.width && viewport.adjusted_x(max_x) > 0 &&
-      viewport.adjusted_y(min_y) < viewport.height && viewport.adjusted_y(max_y) > 0;
+
+    return min_x < viewport.width  && max_x > 0 &&
+      min_y < viewport.height && max_y > 0;
   }
 
   /*
@@ -71,10 +72,10 @@ const Viewport = (function() {
       };
       update_limits(viewport);
 
-      viewport.adjusted_x = function(world_x){ return (world_x - viewport.x) };
-      viewport.adjusted_y = function(world_y){ return (world_y - viewport.y) };
-      viewport.x_to_world = function(viewport_x){ return viewport.x + viewport_x};
-      viewport.y_to_world = function(viewport_y){ return viewport.y + viewport_y};
+      viewport.adjusted_x = function(world_x, depth = 100){ return (world_x - viewport.x) * (depth/100) };
+      viewport.adjusted_y = function(world_y, depth = 100){ return (world_y - viewport.y) * (depth/100) };
+      viewport.x_to_world = function(viewport_x, depth = 100){ return (viewport.x + viewport_x) * (depth/100) };
+      viewport.y_to_world = function(viewport_y, depth = 100){ return (viewport.y + viewport_y) * (depth/100) };
 
       viewport.center_on = function(world_x, world_y){ center_on(viewport, world_x, world_y) };
 
