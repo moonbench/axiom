@@ -63,7 +63,6 @@ const World = (function (){
       world.add_player_entity = function(entity, layer=100){ add_player_entity_to_layer(world, entity, layer) };
       world.add_entity = function(entity, layer=100){ add_entity_to_layer(world, entity, layer) };
 
-
       world.handle_mouse_button = function(event, pressed){ handle_mouse_button(world, event, pressed) };
       world.handle_key = function(event, pressed){ handle_key(world, event, pressed) };
 
