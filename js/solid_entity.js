@@ -61,6 +61,25 @@ const SolidEntity = (function(){
     return b_max > a_min && b_min < a_max;
   }
 
+  function compute_resolutions(a, b, axis_distance){
+    let resolution_vector = Vector.create(0,0);
+    axis_distance.forEach(function(distance, index){
+      if((distance !== true && distance != 0) && (resolution_vector.magnitude == 0 || Math.abs(distance) < Math.abs(resolution_vector.magnitude))){
+        if(index == 0) resolution_vector = Vector.create(a.angle, distance);
+        else if(index == 1) resolution_vector = Vector.create(a.angle-Math.PI/2, distance);
+        else if(index == 2) resolution_vector = Vector.create(b.angle+Math.PI, distance);
+        else if(index == 3) resolution_vector = Vector.create(b.angle+Math.PI/2, distance);
+      }
+    });
+    if(!a.resolution_vector) a.resolution_vector = Vector.create(0,0);
+    a.resolution_vector.add_vector(resolution_vector);
+    if(!b.resolution_vector) b.resolution_vector = Vector.create(a.resolution_vector.angle, -a.resolution_vector.magnitude);
+    if(a.vector){
+      a.vector.magnitude = a.vector.magnitude/2;
+      a.vector.angle = Math.atan2(Math.sin(a.resolution_vector.angle), Math.cos(a.resolution_vector.angle));
+    }
+  }
+
   function check_collision_against(a, b, no_checkback){
     const key = b.x + "." + b.y + "." + b.angle.toFixed(3) + "." + b.width + "." + b.height;
     if(a.collision_checks[key] != undefined) return a.collision_checks[key].is_colliding;
@@ -89,22 +108,7 @@ const SolidEntity = (function(){
     if(axis_distance[axis.length-1] === false) return false;
 
     // We are overlapping
-    let resolution_vector = Vector.create(0,0);
-    axis_distance.forEach(function(distance, index){
-      if((distance !== true && distance != 0) && (resolution_vector.magnitude == 0 || Math.abs(distance) < Math.abs(resolution_vector.magnitude))){
-        if(index == 0) resolution_vector = Vector.create(a.angle, distance);
-        else if(index == 1) resolution_vector = Vector.create(a.angle-Math.PI/2, distance);
-        else if(index == 2) resolution_vector = Vector.create(b.angle+Math.PI, distance);
-        else if(index == 3) resolution_vector = Vector.create(b.angle+Math.PI/2, distance);
-      }
-    });
-    if(!a.resolution_vector) a.resolution_vector = Vector.create(0,0);
-    a.resolution_vector.add_vector(resolution_vector);
-    if(!b.resolution_vector) b.resolution_vector = Vector.create(a.resolution_vector.angle, -a.resolution_vector.magnitude);
-    if(a.vector){
-      a.vector.magnitude = a.vector.magnitude/2;
-      a.vector.angle = Math.atan2(Math.sin(a.resolution_vector.angle), Math.cos(a.resolution_vector.angle));
-    }
+    if(a.resolve_collisions && b.resolve_collisions) compute_resolutions(a, b, axis_distance);
 
     if(!no_checkback) b.check_collision_against(a, true);
     a.collision_checks[key].is_colliding = true;
@@ -187,6 +191,8 @@ const SolidEntity = (function(){
    */
   function extend(entity){
     entity.solid = true;
+    entity.resolve_collisions = true;
+
     entity.check_collision_against = function(other_entity, no_checkback){ return check_collision_against(entity, other_entity, no_checkback)};
     const parent_render_debug = entity.render_debug;
     entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt); parent_render_debug(ctx, dt) };

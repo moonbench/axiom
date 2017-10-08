@@ -80,11 +80,12 @@
       );
     }
 
-    world.add_entity(SolidEntity.create(1200, 900, 300, 300, 3*Math.PI/4));
-    world.add_entity(SolidEntity.create(1200, 300, 100, 100, Math.PI/4));
-    world.add_entity(SolidEntity.create(1200, 150, 100, 100, 2*Math.PI/4));
-    world.add_entity(SolidEntity.create(1200, 450, 100, 100, 3*Math.PI/4));
-    world.add_entity(SolidEntity.create(1500, 300, 100, 100, 4*Math.PI/4));
+    asset_depot.add_image("trash", "assets/trash.png");
+    world.add_entity(SolidEntity.extend(Sprite.create(1200, 900, 300, 300, 3*Math.PI/4, asset_depot.images["trash"] )));
+    world.add_entity(SolidEntity.extend(Sprite.create(1200, 300, 100, 100, Math.PI/4, asset_depot.images["trash"] )));
+    world.add_entity(SolidEntity.extend(Sprite.create(1200, 150, 100, 100, 2*Math.PI/4, asset_depot.images["trash"] )));
+    world.add_entity(SolidEntity.extend(Sprite.create(1200, 450, 100, 100, 3*Math.PI/4, asset_depot.images["trash"] )));
+    world.add_entity(SolidEntity.extend(Sprite.create(1500, 300, 100, 100, 4*Math.PI/4, asset_depot.images["trash"] )));
 
     const engine = Engine.create(world, "game_canvas", "fps_meter");
     engine.run();
