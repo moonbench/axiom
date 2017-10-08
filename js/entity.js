@@ -71,6 +71,7 @@ const Entity = (function (){
     ctx.restore();
   }
   function render(entity, ctx, dt){
+    if(entity.debug_level<1) return;
     render_box_outline(entity, ctx, dt);
   };
 
