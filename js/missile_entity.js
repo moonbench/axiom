@@ -1,9 +1,6 @@
 "use strict";
 
 const MissileEntity = (function(){
-  const laser_sprites = AssetDepot.create();
-  laser_sprites.add_image("laser1", "assets/laser1.png");
-
   function update(entity, dt){
     entity.age += dt;
     if(entity.age > entity.max_age){
@@ -51,7 +48,7 @@ const MissileEntity = (function(){
   }
   return {
     create: function(x, y, width, height, angle, velocity){
-      return extend(MoveableEntity.extend(SolidEntity.extend(Sprite.create(x, y, width, height, angle, laser_sprites.images["laser1"]))), velocity);
+      return extend(MoveableEntity.extend(SolidEntity.create(x, y, width, height, angle)), velocity);
     },
     extend,
   }

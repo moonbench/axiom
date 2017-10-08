@@ -23,7 +23,13 @@ const Gun = (function(){
   }
 
   function shoot_from(gun){
-    let shot = MissileEntity.create(gun.parent.x, gun.parent.y, 10, 100, gun.parent.angle);
+    let shot = MissileEntity.extend(
+      MoveableEntity.extend(
+        SolidEntity.extend(
+          Sprite.create(gun.parent.x, gun.parent.y, 10, 100, gun.parent.angle, gun.parent.layer.world.engine.assets.images["laser1"])
+        )
+      )
+    );
     if(gun.parent.vector) shot.vector.magnitude += gun.parent.vector.magnitude;
     shot.parent = gun.parent;
     gun.parent.layer.add_entity(shot);
