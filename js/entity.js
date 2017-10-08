@@ -60,7 +60,7 @@ const Entity = (function (){
   }
   function pre_render(entity, viewport, ctx, dt){
     ctx.save();
-    ctx.translate( viewport.adjusted_x(entity.x), viewport.adjusted_y(entity.y));
+    ctx.translate( viewport.adjusted_x(entity.x, entity.layer.depth), viewport.adjusted_y(entity.y, entity.layer.depth));
     ctx.rotate(entity.angle);
   }
   function post_render(entity, ctx, dt){

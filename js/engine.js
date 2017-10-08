@@ -13,14 +13,13 @@ const Engine = (function(){
   * Game loop
   */
   function update(engine, dt){
-    engine.world.update(engine, dt);
-    engine.viewport.center_on(engine.world.player_entities[0].x, engine.world.player_entities[0].y);
+    engine.world.update(dt);    
   }
   function render(engine, dt){
     engine.viewport.clear(engine.ctx, engine.remainder);
-    engine.world.render(engine, dt);
-    engine.cursor.render( engine.ctx, dt );
-    engine.viewport.render_foreground( engine.ctx, dt );
+    engine.world.render(dt);
+    engine.cursor.render(engine.ctx, dt);
+    engine.viewport.render_foreground(engine.ctx, dt);
   }
 
   function draw_frame(engine){
@@ -53,9 +52,7 @@ const Engine = (function(){
   }
 
   function handle_key(engine, event, pressed){
-    engine.world.player_entities.forEach(function(entity){
-      entity.handle_key(event, pressed);
-    });
+    engine.world.handle_key(event, pressed);
   }
   function handle_mouse_button(engine, event, pressed){
     engine.cursor.set_pressed(pressed);
@@ -82,7 +79,7 @@ const Engine = (function(){
     create: function(world, canvas_id, fps_meter_id){
       const engine = {
         world,
-        fps: 60,
+        fps: 30,
         now: null,
         last: current_time_in_ms(),
         remainder: 0,

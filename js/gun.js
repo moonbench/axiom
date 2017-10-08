@@ -26,8 +26,8 @@ const Gun = (function(){
     let shot = MissileEntity.create(gun.parent.x, gun.parent.y, 10, 100, gun.parent.angle);
     if(gun.parent.vector) shot.vector.magnitude += gun.parent.vector.magnitude;
     shot.parent = gun.parent;
-    gun.parent.world.add_entity(shot);
-    gun.parent.world.engine.audio.play("gun");
+    gun.parent.layer.add_entity(shot);
+    gun.parent.layer.world.engine.audio.play("gun");
   }
 
   return {

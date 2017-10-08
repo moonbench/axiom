@@ -103,22 +103,22 @@ const QuadTree = (function(){
       });
       ctx.stroke();
     }
-    function render(engine, node, ctx, dt){
-      if(!engine.viewport.within(node.x, node.y, node.x + node.width, node.y + node.height)) return;
+    function render(layer, node, ctx, dt){
+      if(!layer.world.engine.viewport.within(node.x, node.y, node.x + node.width, node.y + node.height)) return;
       if(node.debug_level <1 ) return;
 
       ctx.save();
-      ctx.translate( engine.viewport.adjusted_x(node.x), engine.viewport.adjusted_y(node.y));
+      ctx.translate( layer.world.engine.viewport.adjusted_x(node.x, layer.depth), layer.world.engine.viewport.adjusted_y(node.y, layer.depth));
 
       // level 1 & 2
-      draw_quad_node(engine, node, ctx, dt);
+      draw_quad_node(layer.world.engine, node, ctx, dt);
       // level 3
       draw_debug_links(node, ctx, dt);
       // level 4
       draw_debug_text(node, ctx, dt);
 
       ctx.restore();
-      node.children.forEach(function(child){ render(engine, child, ctx, dt) });
+      node.children.forEach(function(child){ render(layer.world.engine, child, ctx, dt) });
     }
 
 
@@ -137,7 +137,7 @@ const QuadTree = (function(){
         node.run_collision_checks = function(){ run_collision_checks(node) }
         node.add = function(entity){ add_entity_to_node(entity, node) }
         node.update = function(dt){ update(node, dt) }
-        node.render = function(engine, ctx, dt){ render(engine, node, ctx, dt) }
+        node.render = function(layer, ctx, dt){ render(layer, node, ctx, dt) }
 
         return node;
       }
@@ -147,13 +147,13 @@ const QuadTree = (function(){
 
   // Tree is built from a root node
   return {
-    create: function(world){
+    create: function(layer){
       const tree = {};
 
       tree.add = function(entity){ tree.root.add(entity) }
-      tree.reset = function(){ tree.root = Node.create(0, 0, world.width, world.height) }
+      tree.reset = function(){ tree.root = Node.create(0, 0, layer.world.width, layer.world.height ) }
       tree.run_collision_checks = function(){ tree.root.run_collision_checks() }
-      tree.render = function(ctx, dt){ tree.root.render(ctx, dt) }
+      tree.render = function(layer, ctx, dt){ tree.root.render(layer, ctx, dt) }
 
       return tree;
     }
