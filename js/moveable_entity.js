@@ -29,8 +29,10 @@ const MoveableEntity = (function(){
     entity.state.rotate = Util.limit(distance, entity.max_rotation_speed, -entity.max_rotation_speed);
   }
   function dampen_rotation(entity, dt){
-    if(entity.state.rotate>0) entity.state.rotate -= 0.02*dt;
-    else if(entity.state.rotate<0) entity.state.rotate += 0.02*dt;
+    if(entity.friction==0) return;
+  
+    if(entity.state.rotate>0) entity.state.rotate -= entity.state.rotate*entity.friction*dt;
+    else if(entity.state.rotate<0) entity.state.rotate += entity.state.rotate*entity.friction*dt;
     entity.state.rotate = entity.state.rotate;
   }
   function move_to(entity, x, y){
@@ -55,7 +57,7 @@ const MoveableEntity = (function(){
     if(entity.vector.magnitude <= 0.1) entity.vector.magnitude = 0;
     if(entity.vector.magnitude <= 0) return;
     move_to(entity, entity.vector.x_after(entity.x, dt), entity.vector.y_after(entity.y, dt));
-    entity.vector.magnitude -= (entity.vector.magnitude * dt)/2;
+    entity.vector.magnitude -= entity.vector.magnitude * entity.friction * dt;
   }
 
 
@@ -88,6 +90,7 @@ const MoveableEntity = (function(){
     entity.moveable = true;
     entity.max_rotation_speed = 1.6;
     entity.max_acceleration = 10;
+    entity.friction = 0.4;
 
     entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
 
