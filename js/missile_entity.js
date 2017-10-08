@@ -15,11 +15,6 @@ const MissileEntity = (function(){
     return true;
   }
 
-  function resolve_collision(entity){
-    if(!entity.resolution_vector) return;
-    entity.dead = true;
-  }
-
   function do_damage(entity, other_entity){
     entity.layer.world.engine.audio.play("hit");
     if(other_entity.inflict_damage) other_entity.inflict_damage(25);
@@ -33,6 +28,7 @@ const MissileEntity = (function(){
     entity.parent = null;
     entity.vector.magnitude = 750;
     entity.vector.angle = entity.angle;
+    entity.resolve_collisions = false;
 
     const parent_update = entity.update;
     entity.update = function(dt){ update(entity, dt); parent_update(dt) };
@@ -41,13 +37,12 @@ const MissileEntity = (function(){
     entity.check_collision_against = function(other_entity, no_checkback){
       if(check_collision_against_precheck(entity, other_entity, no_checkback))
         if(parent_check_collision_against(other_entity, no_checkback)){
-          do_damage(entity, other_entity)
+          do_damage(entity, other_entity);
+          entity.dead = true;
           return true;
         }
       return false;
     };
-
-    entity.resolve_collision = function(){ resolve_collision(entity) };
 
     return entity;
   }
