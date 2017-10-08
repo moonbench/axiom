@@ -89,8 +89,10 @@
 
     const engine = Engine.create(world, "game_canvas", "fps_meter");
     engine.run();
+
     engine.audio.add_to_group("bg", asset_depot.add_audio("bg1", "assets/bg.mp3"));
-    engine.audio.play("bg");
+    engine.audio.add_to_group("bg", asset_depot.add_audio("bg2", "assets/bg2.mp3"));
+    engine.audio.loop("bg", function(){ return true; });
     engine.audio.add_to_group("gun", asset_depot.add_audio("laser1", "assets/laser1.mp3"));
     engine.audio.add_to_group("gun", asset_depot.add_audio("laser2", "assets/laser2.mp3"));
     engine.audio.add_to_group("gun", asset_depot.add_audio("laser3", "assets/laser3.mp3"));
@@ -100,14 +102,21 @@
     engine.audio.add_to_group("hit", asset_depot.add_audio("bang2", "assets/bang2.mp3"));
     engine.audio.add_to_group("hit", asset_depot.add_audio("bang3", "assets/bang3.mp3"));
     engine.audio.add_to_group("hit", asset_depot.add_audio("bang4", "assets/bang4.mp3"));
+    engine.audio.add_to_group("thruster", asset_depot.add_audio("thruster1", "assets/thruster2.mp3"));
 
     asset_depot.add_image("ship2", "assets/ship2.png");
     world.add_entity(Sprite.create(1200, 1000, 500, 900, 4, asset_depot.images["ship2"]), 40);
 
-    asset_depot.add_image("ship2", "assets/ship2.png");
     world.add_entity( Sprite.create(500, 900, 400, 800, 6, asset_depot.images["ship2"]), 20);
 
-    asset_depot.add_image("ship2", "assets/ship2.png");
+    asset_depot.add_image("ship3", "assets/ship3.png");
+    world.add_entity( Sprite.create(5000, 1900, 500, 1000, 5, asset_depot.images["ship3"]), 18);
+    asset_depot.add_image("ship4", "assets/ship4.png");
+    const some_ship = MoveableEntity.extend(Sprite.create(1500, 3000, 400, 800, 0.8, asset_depot.images["ship4"]));
+    some_ship.state.forward = true;
+    some_ship.max_acceleration = 0.5;
+    world.add_entity(some_ship, 26);
+
     world.add_entity( Sprite.create(1200, 1500, 600, 1000, 2.5, asset_depot.images["ship2"]), 120);
 
     asset_depot.add_image("planet", "assets/planet.jpg");

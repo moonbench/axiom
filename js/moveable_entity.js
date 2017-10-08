@@ -12,11 +12,10 @@ const MoveableEntity = (function(){
     if(entity.state.reverse) vector.add( entity.angle + Math.PI, 3);
     if(entity.state.left) vector.add( entity.angle - Math.PI/2, 3);
     if(entity.state.right) vector.add( entity.angle + Math.PI/2, 3);
+
+    if(vector.magnitude > entity.max_acceleration) vector.magnitude = entity.max_acceleration;
+
     return vector;
-  }
-  function resolve_collision(entity){
-    if(!entity.resolution_vector) return;
-    move_to(entity, entity.resolution_vector.x_after(entity.x, 1), entity.resolution_vector.y_after(entity.y, 1));
   }
   function turn_towards(entity, x, y){
     const angle_to_spot = Util.normalize_angle(Math.atan2(y-entity.y, x - entity.x));
@@ -82,14 +81,13 @@ const MoveableEntity = (function(){
     draw_velocity_vector(entity, ctx, dt);
   }
 
-
-
   /*
    * Initalization
    */
   function extend(entity){
     entity.moveable = true;
     entity.max_rotation_speed = 1.6;
+    entity.max_acceleration = 10;
 
     entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
 
@@ -99,7 +97,6 @@ const MoveableEntity = (function(){
     const parent_render = entity.render;
     entity.render = function(ctx, dt){ render(entity, ctx, dt); parent_render(ctx, dt) };
     entity.vector = Vector.create(0, 0);
-    entity.resolve_collision = function(){ resolve_collision(entity) };
 
     return entity;
   }

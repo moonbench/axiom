@@ -11,7 +11,7 @@ const AssetDepot = (function(){
   function add_audio(depot, key, src){
     depot.audio[key] = document.createElement("audio");
     depot.audio[key].src = src;
-    depot.audio[key].volume = 0.5;
+    depot.audio[key].volume = 0.25;
     return depot.audio[key];
   }
 
