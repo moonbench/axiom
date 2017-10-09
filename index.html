@@ -38,6 +38,7 @@
     </div>
   </div>
   <script type="text/javascript" src="js/util.js"></script>
+  <script type="text/javascript" src="js/ease.js"></script>
   <script type="text/javascript" src="js/vector.js"></script>
   <script type="text/javascript" src="js/cursor.js"></script>
   <script type="text/javascript" src="js/meter.js"></script>
@@ -88,9 +89,9 @@
     engine.assets.add_image("test", "assets/fighter2.png");
     const car = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(Sprite.create(600, 200, 60, 65, Math.PI, engine.assets.images["test"])))));
     car.is_selected = true;
-    car.acceleration = 4;
+    car.acceleration = 7;
+    car.acceleration_time = 1;
     world.add_player_entity(car);
-
 
     engine.assets.add_image("station", "assets/station.png");
     const station = MoveableEntity.extend(
@@ -124,6 +125,7 @@
     const some_ship = MoveableEntity.extend(Sprite.create(510, 3000, 400, 800, 6.1, engine.assets.images["ship4"]));
     some_ship.state.forward = true;
     some_ship.acceleration = 0.5;
+    some_ship.acceleration_time = 20;
     world.add_entity(some_ship, 26);
 
     world.add_entity( Sprite.create(2500, 1400, 800, 1400, 4.5, engine.assets.images["ship2"]), 120);
