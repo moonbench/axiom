@@ -23,7 +23,7 @@ const ParticleEmitter = (function(){
     return emitter.particles.filter(function(particle){ return particle.dead == false});
   }
 
-  function extend(entity, spread){
+  function extend(entity, spread, limit = 20){
     entity.spread = spread || Math.PI*2;
 
     entity.update = function(dt){ update(entity, dt) };
@@ -35,7 +35,7 @@ const ParticleEmitter = (function(){
     entity.next_angle = function(){ return Math.PI - entity.spread/2 + Math.random()*entity.spread };
 
     entity.particles = [];
-    for(var i = 0; i < 10+Math.random()*20; i++){
+    for(var i = 0; i < limit/2+((Math.random()*limit)/2); i++){
       entity.particles.push(create_particle(entity));
     } 
 
@@ -44,8 +44,8 @@ const ParticleEmitter = (function(){
 
 
   return {
-    create: function(x, y, angle, spread){
-      return extend(Entity.create(x, y, 50, 50, angle), spread);
+    create: function(x, y, angle, spread, limit){
+      return extend(Entity.create(x, y, 50, 50, angle), spread, limit);
     },
     extend,
   }

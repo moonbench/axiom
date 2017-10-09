@@ -14,7 +14,6 @@ const MoveableEntity = (function(){
     if(entity.state.right) vector.add( entity.angle + Math.PI/2, 3);
 
     if(vector.magnitude > entity.max_acceleration) vector.magnitude = entity.max_acceleration;
-
     return vector;
   }
   function turn_towards(entity, x, y){
