@@ -87,6 +87,7 @@ const SolidEntity = (function(){
 
     if(!a.solid || !b.solid) return false;
     if(!a.moveable && !b.moveable) return false;
+    if(a.dead || b.dead) return false;
     if(!entities_are_close_to_colliding(a,b)) return false;
 
     const axis = [];
