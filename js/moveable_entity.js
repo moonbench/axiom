@@ -30,7 +30,7 @@ const MoveableEntity = (function(){
   }
   function dampen_rotation(entity, dt){
     if(entity.friction==0) return;
-  
+
     if(entity.state.rotate>0) entity.state.rotate -= entity.state.rotate*entity.friction*dt;
     else if(entity.state.rotate<0) entity.state.rotate += entity.state.rotate*entity.friction*dt;
     entity.state.rotate = entity.state.rotate;

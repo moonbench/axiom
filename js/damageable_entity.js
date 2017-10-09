@@ -4,6 +4,7 @@ const DamageableEntity = (function(){
 
   function kill(entity){
     entity.dead = true;
+    entity.layer.add_entity(ParticleEmitter.create(entity.x, entity.y, entity.angle));
   }
 
   function do_damage_to(entity, damage){

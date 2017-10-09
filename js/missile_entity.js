@@ -39,6 +39,7 @@ const MissileEntity = (function(){
         if(parent_check_collision_against(other_entity, no_checkback)){
           do_damage(entity, other_entity);
           entity.dead = true;
+          entity.layer.add_entity(ParticleEmitter.create(entity.x, entity.y, entity.angle));
           return true;
         }
       return false;
