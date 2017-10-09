@@ -120,7 +120,7 @@
     world.add_entity( Sprite.create(5000, 1900, 300, 600, 4.1, engine.assets.images["ship3"]), 18);
 
     engine.assets.add_image("ship4", "assets/ship4.png");
-    const some_ship = MoveableEntity.extend(Sprite.create(510, 3000, 400, 800, 6.4, engine.assets.images["ship4"]));
+    const some_ship = MoveableEntity.extend(Sprite.create(510, 3000, 400, 800, 6.1, engine.assets.images["ship4"]));
     some_ship.state.forward = true;
     some_ship.max_acceleration = 0.5;
     world.add_entity(some_ship, 26);
