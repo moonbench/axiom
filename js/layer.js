@@ -31,7 +31,7 @@ const Layer = (function(){
         engine.viewport.adjusted_x(entity.x, layer.depth)+entity.min.x,
         engine.viewport.adjusted_y(entity.y, layer.depth)+entity.min.y,
         engine.viewport.adjusted_x(entity.x, layer.depth)+entity.max.x,
-        engine.viewport.adjusted_y(entity.y, layer.depth)+entity.max.y,
+        engine.viewport.adjusted_y(entity.y, layer.depth)+entity.max.y
       )) return;
 
       entity.pre_render(engine.viewport, layer.world.engine.ctx, dt);

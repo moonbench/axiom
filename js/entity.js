@@ -135,7 +135,7 @@ const Entity = (function (){
         height,
         angle,
         dead: false,
-        debug_level: 0,
+        debug_level: 3,
       };
       reset(entity);
       normalize(entity);

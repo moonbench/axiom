@@ -43,7 +43,7 @@ const MissileEntity = (function(){
             entity.x+entity.corners.right[0],
             entity.y+entity.corners.right[1],
             entity.angle,
-            Math.PI/2,
+            Math.PI/2
             ));
           return true;
         }
