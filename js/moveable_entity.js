@@ -7,13 +7,29 @@ const MoveableEntity = (function(){
    */
   function acceleration_vector(entity){
     const vector = Vector.create(0,0);
-    // TODO modify how much of each component we use when going diagonally
-    if(entity.state.forward) vector.add( entity.angle, 3);
-    if(entity.state.reverse) vector.add( entity.angle + Math.PI, 3);
-    if(entity.state.left) vector.add( entity.angle - Math.PI/2, 3);
-    if(entity.state.right) vector.add( entity.angle + Math.PI/2, 3);
 
-    if(vector.magnitude > entity.max_acceleration) vector.magnitude = entity.max_acceleration;
+    if(entity.state.forward){
+      entity.accelerations.forward = Vector.create(entity.angle, entity.accelerations.forward ? entity.accelerations.forward.magnitude : entity.acceleration);
+      vector.add_vector(entity.accelerations.forward);
+    } else if(entity.accelerations.forward){ entity.accelerations.forward = false }
+
+    if(entity.state.reverse){
+      entity.accelerations.reverse = Vector.create(entity.angle+Math.PI, entity.accelerations.reverse ? entity.accelerations.reverse.magnitude : entity.acceleration);
+      vector.add_vector(entity.accelerations.reverse);
+    } else if(entity.accelerations.reverse){ entity.accelerations.reverse = false }
+
+    if(entity.state.left){
+      entity.accelerations.left = Vector.create(entity.angle-Math.PI/2, entity.accelerations.left ? entity.accelerations.left.magnitude : entity.acceleration);
+      vector.add_vector(entity.accelerations.left);
+    } else if(entity.accelerations.left){ entity.accelerations.left = false }
+
+    if(entity.state.right){
+      entity.accelerations.right = Vector.create(entity.angle+Math.PI/2, entity.accelerations.right ? entity.accelerations.right.magnitude : entity.acceleration);
+      vector.add_vector(entity.accelerations.right);
+    } else if(entity.accelerations.right){ entity.accelerations.right = false }
+
+    vector.magnitude = vector.magnitude > entity.acceleration ? entity.acceleration : vector.magnitude;
+
     return vector;
   }
   function turn_towards(entity, x, y){
@@ -88,10 +104,11 @@ const MoveableEntity = (function(){
   function extend(entity){
     entity.moveable = true;
     entity.max_rotation_speed = 1.6;
-    entity.max_acceleration = 10;
+    entity.acceleration = 1;
     entity.friction = 0.4;
 
     entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
+    entity.accelerations = {forward: false, reverse: false, left: false, right: false};
 
     entity.update = function(dt){ entity.reset(); update(entity, dt); entity.normalize() };
     entity.turn_towards = function(x, y){ turn_towards(entity, x, y) };
