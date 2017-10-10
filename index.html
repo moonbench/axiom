@@ -67,6 +67,8 @@
     const engine = Engine.create(world, "game_canvas", "fps_meter");
 
 
+
+    engine.audio.add_to_group("bg", engine.assets.add_audio("bg3", "assets/bg3.mp3"));
     engine.audio.add_to_group("bg", engine.assets.add_audio("bg2", "assets/bg2.mp3"));
     engine.audio.add_to_group("bg", engine.assets.add_audio("bg1", "assets/bg.mp3"));
     engine.audio.loop("bg", function(){ return true; });
@@ -79,6 +81,9 @@
     engine.audio.add_to_group("hit", engine.assets.add_audio("bang2", "assets/bang2.mp3"));
     engine.audio.add_to_group("hit", engine.assets.add_audio("bang3", "assets/bang3.mp3"));
     engine.audio.add_to_group("hit", engine.assets.add_audio("bang4", "assets/bang4.mp3"));
+    engine.audio.add_to_group("explode", engine.assets.add_audio("explosion1", "assets/explosion1.mp3"));
+    engine.audio.add_to_group("explode", engine.assets.add_audio("explosion2", "assets/explosion2.mp3"));
+    engine.audio.add_to_group("explode", engine.assets.add_audio("explosion3", "assets/explosion3.mp3"));
     engine.audio.add_to_group("thruster", engine.assets.add_audio("thruster1", "assets/thruster2.mp3"));
     engine.assets.add_image("laser1", "assets/laser1.png");
 
