@@ -55,12 +55,12 @@ const Engine = (function(){
       if(engine.handle_mouse_button) engine.handle_mouse_button(engine, event, false)
     });
   }
+
   function update_timing(engine){
     engine.step = 1/engine.fps;
     engine.slowstep = engine.slow * engine.step;
   }
-
-
+  
   function set_world(engine, world){
     engine.world = world;
     engine.world.engine = engine;
