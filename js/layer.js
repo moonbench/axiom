@@ -4,8 +4,10 @@ const Layer = (function(){
 
   function update(layer, dt){
     layer.player_entities.forEach(function(entity){
-      entity.turn_towards(engine.viewport.x_to_world(engine.cursor.x, layer.depth), engine.viewport.y_to_world(engine.cursor.y, layer.depth));
-      engine.viewport.center_on(entity.x, entity.y);
+      entity.turn_towards(
+        layer.world.engine.viewport.x_to_world(layer.world.engine.cursor.x, layer.depth),
+        layer.world.engine.viewport.y_to_world(layer.world.engine.cursor.y, layer.depth));
+      layer.world.engine.viewport.center_on(entity.x, entity.y);
     });
 
     layer.quadtree.reset();
@@ -25,20 +27,20 @@ const Layer = (function(){
   }
 
 
-  function render(layer, dt){
+  function render(layer, ctx, dt){
     layer.entities.forEach(function(entity){
-      if(!engine.viewport.within(
-        engine.viewport.adjusted_x(entity.x, layer.depth)+entity.min.x,
-        engine.viewport.adjusted_y(entity.y, layer.depth)+entity.min.y,
-        engine.viewport.adjusted_x(entity.x, layer.depth)+entity.max.x,
-        engine.viewport.adjusted_y(entity.y, layer.depth)+entity.max.y
+      if(!layer.world.engine.viewport.within(
+        layer.world.engine.viewport.adjusted_x(entity.x, layer.depth)+entity.min.x,
+        layer.world.engine.viewport.adjusted_y(entity.y, layer.depth)+entity.min.y,
+        layer.world.engine.viewport.adjusted_x(entity.x, layer.depth)+entity.max.x,
+        layer.world.engine.viewport.adjusted_y(entity.y, layer.depth)+entity.max.y
       )) return;
 
-      entity.pre_render(engine.viewport, layer.world.engine.ctx, dt);
-      entity.render(layer.world.engine.ctx, dt);
-      entity.post_render(layer.world.engine.ctx, dt);
+      entity.pre_render(layer.world.engine.viewport, ctx, dt);
+      entity.render(ctx, dt);
+      entity.post_render(ctx, dt);
     });
-    layer.quadtree.render(layer, layer.world.engine.ctx, dt);
+    layer.quadtree.render(layer, ctx, dt);
   }
 
 
@@ -82,7 +84,7 @@ const Layer = (function(){
       layer.add_entity = function(entity){ add_entity_to_layer(entity, layer) };
 
       layer.update = function(dt){ update(layer, dt); };
-      layer.render = function(dt){ render(layer, dt); };
+      layer.render = function(ctx, dt){ render(layer, ctx, dt); };
 
       layer.handle_mouse_button = function(event, pressed){ handle_mouse_button(layer, event, pressed) };
       layer.handle_key = function(event, pressed){ handle_key(layer, event, pressed) };

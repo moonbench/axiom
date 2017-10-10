@@ -17,7 +17,7 @@ const Engine = (function(){
   }
   function render(engine, dt){
     engine.viewport.clear(engine.ctx, engine.remainder);
-    engine.world.render(dt);
+    engine.world.render(engine.ctx, dt);
     engine.cursor.render(engine.ctx, dt);
     engine.viewport.render_foreground(engine.ctx, dt);
   }
