@@ -104,7 +104,12 @@ const QuadTree = (function(){
       ctx.stroke();
     }
     function render(layer, node, ctx, dt){
-      if(!layer.world.engine.viewport.within(node.x, node.y, node.x + node.width, node.y + node.height)) return;
+      if(!layer.world.engine.viewport.within(
+        layer.world.engine.viewport.adjusted_x(node.x, layer.depth),
+        layer.world.engine.viewport.adjusted_y(node.y, layer.depth),
+        layer.world.engine.viewport.adjusted_x(node.x, layer.depth)+node.width,
+        layer.world.engine.viewport.adjusted_y(node.y, layer.depth)+node.height
+      )) return;
       if(node.debug_level <1 ) return;
 
       ctx.save();
@@ -151,7 +156,12 @@ const QuadTree = (function(){
       const tree = {};
 
       tree.add = function(entity){ tree.root.add(entity) }
-      tree.reset = function(){ tree.root = Node.create(0, 0, layer.world.width, layer.world.height ) }
+      tree.reset = function(){
+        if(layer.world.allow_negative)
+          tree.root = Node.create(-layer.world.width, -layer.world.height, layer.world.width*2, layer.world.height*2);
+        else
+          tree.root = Node.create(0, 0, layer.world.width, layer.world.height);
+      };
       tree.run_collision_checks = function(){ tree.root.run_collision_checks() }
       tree.render = function(layer, ctx, dt){ tree.root.render(layer, ctx, dt) }
 

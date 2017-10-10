@@ -10,20 +10,20 @@ const Layer = (function(){
       layer.world.engine.viewport.center_on(entity.x, entity.y);
     });
 
-    layer.quadtree.reset();
+    if(layer.quadtree) layer.quadtree.reset();
     const pending = layer.pending_addition;
     layer.pending_addition = [];
 
     layer.entities = layer.entities.concat(pending).map(function(entity){
       entity.resolve_collision();
       entity.update(dt);
-      if(entity.solid) layer.quadtree.add(entity);
+      if(layer.quadtree && entity.solid) layer.quadtree.add(entity);
       return entity;
     }).filter(function(entity){
       return entity.dead == false;
     });
 
-    layer.quadtree.run_collision_checks();
+    if(layer.quadtree) layer.quadtree.run_collision_checks();
   }
 
 
@@ -40,7 +40,7 @@ const Layer = (function(){
       entity.render(ctx, dt);
       entity.post_render(ctx, dt);
     });
-    layer.quadtree.render(layer, ctx, dt);
+    if(layer.quadtree) layer.quadtree.render(layer, ctx, dt);
   }
 
 
@@ -64,21 +64,21 @@ const Layer = (function(){
       entity.handle_key(event, pressed);
     });
   }
+
+  function enable_physics(layer){
+    layer.physics = true;
+    layer.quadtree = QuadTree.create(layer);
+    layer.quadtree.layer = layer;
+  }
   return {
-    create: function(depth = 100, world, playable = false){
+    create: function(depth = 100, world, physics = false){
       var layer = {
         depth,
         world,
-        playable,
         entities: [],
         player_entities: [],
         pending_addition: [],
       };
-
-      if(playable){
-        layer.quadtree = QuadTree.create(layer);
-        layer.quadtree.layer = layer;
-      }
 
       layer.add_player_entity = function(entity){ add_player_entity_to_layer(entity, layer) };
       layer.add_entity = function(entity){ add_entity_to_layer(entity, layer) };
@@ -88,6 +88,9 @@ const Layer = (function(){
 
       layer.handle_mouse_button = function(event, pressed){ handle_mouse_button(layer, event, pressed) };
       layer.handle_key = function(event, pressed){ handle_key(layer, event, pressed) };
+
+      layer.enable_physics = function(){ enable_physics(layer) };
+      if(physics) layer.enable_physics();
 
       return layer;
     }
