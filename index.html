@@ -79,7 +79,11 @@
       },
 
       entity_loading_function: function(world, assets){
-        const bg = Sprite.create(world.width, world.height, world.height*2, world.width*2, 0, assets.images["title_bg"]);
+        const bg = MoveableEntity.extend(
+          Sprite.create(world.width*5, world.height*5, world.height*2, world.width*2, 0, assets.images["title_bg"])
+        );
+        bg.friction = 0;
+        bg.state.rotate = 0.01;
         world.add_entity(bg, 10);
 
         const planet = MoveableEntity.extend(
