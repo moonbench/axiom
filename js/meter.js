@@ -27,7 +27,7 @@ const Meter = (function(){
 
         // Graph
         graph:   1,
-        history: 30
+        history: 20,
         });
 
       return meter;
