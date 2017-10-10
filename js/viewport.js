@@ -44,14 +44,14 @@ const Viewport = (function() {
   function update_limits(viewport){
     viewport.limits = {};
     viewport.limits.world = {
-      min_x: 0,
-      min_y: 0,
+      min_x: viewport.world.allow_negative ? -viewport.world.width : 0,
+      min_y: viewport.world.allow_negative ? -viewport.world.height : 0,
       max_x: viewport.world.width,
       max_y: viewport.world.height
     };
     viewport.limits.scrolling = {
-      min_x: viewport.width/2,
-      min_y: viewport.height/2,
+      min_x: viewport.limits.world.min_x + viewport.width/2,
+      min_y: viewport.limits.world.min_y + viewport.height/2,
       max_x: viewport.limits.world.max_x - viewport.width/2,
       max_y: viewport.limits.world.max_y - viewport.height/2
     };

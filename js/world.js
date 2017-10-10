@@ -55,6 +55,7 @@ const World = (function (){
         width,
         height,
         layers: [],
+        allow_negative: false,
       };
 
       world.update = function(dt){ update(world, dt) };
