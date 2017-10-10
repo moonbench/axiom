@@ -41,6 +41,10 @@ const Util = (function(){
       bottom_right: projection(x_offset+entity.corners.bottom_right[0], y_offset+entity.corners.bottom_right[1], axis)};
   }
 
+  function current_time_in_ms(){
+    return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
+  }
+
   return {
     lines_intersect,
     normalize_angle,
@@ -48,6 +52,7 @@ const Util = (function(){
     projection,
     projection_to_scalar,
     project_entity_on_axis,
+    current_time_in_ms,
   }
 })();
 

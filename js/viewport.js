@@ -58,19 +58,23 @@ const Viewport = (function() {
   }
 
 
+  function set_world(viewport, world){
+    viewport.world = world;
+    update_limits(viewport);
+  }
+
+
   /*
   * Public methods
   */
   return {
-    create: function(canvas, world){
+    create: function(canvas){
       const viewport = {
         width: canvas.width,
         height: canvas.height,
         x: 0,
         y: 0,
-        world,
       };
-      update_limits(viewport);
 
       viewport.adjusted_x = function(world_x, depth = 100){ return (world_x - viewport.x) * (depth/100) };
       viewport.adjusted_y = function(world_y, depth = 100){ return (world_y - viewport.y) * (depth/100) };
@@ -83,6 +87,8 @@ const Viewport = (function() {
       viewport.render_foreground = function(ctx, dt){ render_foreground( viewport, ctx, dt ); };
 
       viewport.within = function(min_x, min_y, max_x, max_y){ return within(viewport, min_x, min_y, max_x, max_y) };
+
+      viewport.set_world = function(world){ set_world(viewport, world) };
 
       return viewport;
     }
