@@ -110,7 +110,7 @@ const MoveableEntity = (function(){
    */
   function extend(entity){
     entity.moveable = true;
-    entity.max_rotation_speed = 1.6;
+    entity.max_rotation_speed = Math.PI;
     entity.friction = 0.4;
     entity.acceleration = 1;
     entity.acceleration_time = 1;
