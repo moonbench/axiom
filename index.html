@@ -39,34 +39,38 @@
       <canvas id="game_canvas" width="1280" height="720"></canvas>
     </div>
   </div>
-  <script type="text/javascript" src="js/util.js"></script>
-  <script type="text/javascript" src="js/ease.js"></script>
-  <script type="text/javascript" src="js/vector.js"></script>
-  <script type="text/javascript" src="js/cursor.js"></script>
-  <script type="text/javascript" src="js/meter.js"></script>
-  <script type="text/javascript" src="js/viewport.js"></script>
-  <script type="text/javascript" src="js/asset_depot.js"></script>
-  <script type="text/javascript" src="js/entity.js"></script>
-  <script type="text/javascript" src="js/solid_entity.js"></script>
-  <script type="text/javascript" src="js/moveable_entity.js"></script>
-  <script type="text/javascript" src="js/driveable_entity.js"></script>
-  <script type="text/javascript" src="js/shooting_entity.js"></script>
-  <script type="text/javascript" src="js/missile_entity.js"></script>
-  <script type="text/javascript" src="js/damageable_entity.js"></script>
-  <script type="text/javascript" src="js/particle_emitter.js"></script>
-  <script type="text/javascript" src="js/particle.js"></script>
+
+
+  <script type="text/javascript" src="js/util/util.js"></script>
+  <script type="text/javascript" src="js/util/vector.js"></script>
+  <script type="text/javascript" src="js/util/ease.js"></script>
+
+  <script type="text/javascript" src="js/engine/asset_depot.js"></script>
+  <script type="text/javascript" src="js/engine/audio_emitter.js"></script>
+  <script type="text/javascript" src="js/engine/meter.js"></script>
+  <script type="text/javascript" src="js/engine/engine.js"></script>
+
+  <script type="text/javascript" src="js/entities/entity.js"></script>
+  <script type="text/javascript" src="js/entities/sprite.js"></script>
+  <script type="text/javascript" src="js/entities/solid.js"></script>
+  <script type="text/javascript" src="js/entities/moveable.js"></script>
+  <script type="text/javascript" src="js/entities/driveable.js"></script>
+  <script type="text/javascript" src="js/entities/shooting.js"></script>
+  <script type="text/javascript" src="js/entities/missile.js"></script>
+  <script type="text/javascript" src="js/entities/damageable.js"></script>
+  <script type="text/javascript" src="js/entities/particle.js"></script>
+  <script type="text/javascript" src="js/entities/particle_emitter.js"></script>
+
+  <script type="text/javascript" src="js/universe/quadtree.js"></script>
+  <script type="text/javascript" src="js/universe/layer.js"></script>
+  <script type="text/javascript" src="js/universe/world.js"></script>
+  <script type="text/javascript" src="js/universe/viewport.js"></script>
+
   <script type="text/javascript" src="js/gun.js"></script>
-  <script type="text/javascript" src="js/sprite.js"></script>
-  <script type="text/javascript" src="js/layer.js"></script>
-  <script type="text/javascript" src="js/quadtree.js"></script>
-  <script type="text/javascript" src="js/world.js"></script>
-  <script type="text/javascript" src="js/audio_emitter.js"></script>
-  <script type="text/javascript" src="js/engine.js"></script>
+  <script type="text/javascript" src="js/cursor.js"></script>
   <script type="text/javascript" src="js/game.js"></script>
 
   <script type="text/javascript">
-
-
     const game = Game.create("game_canvas", "fps_meter");
 
     const title_phase = {
@@ -107,7 +111,6 @@
         engine.cursor.move_to(adjusted_x, adjusted_y);
       },
     };
-
 
     
     const world = World.create(3000, 2000);
