@@ -46,8 +46,8 @@ const Gun = (function(){
         parent,
       };
 
-      gun.time_since_last_shot = gun.time_between_shots;
-      gun.time_since_last_burst_shot = gun.time_between_burst_shots;
+      gun.time_since_last_shot = 0;
+      gun.time_since_last_burst_shot = 0;
       gun.shots_this_burst = 0;
       gun.state = {shooting: false};
 
