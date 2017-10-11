@@ -73,7 +73,7 @@
   <script type="text/javascript">
     const game = Game.create("game_canvas", "fps_meter");
 
-    const title_phase = {
+    const title_scene = {
       world: World.create(game.engine.viewport.width, game.engine.viewport.height),
 
       asset_loading_function: function(engine){
@@ -102,7 +102,7 @@
       },
 
       handle_mouse_button: function(engine, event, pressed){
-        if(pressed) game.set_phase(level_phase);
+        if(pressed) game.set_scene(level_scene);
       },
 
       handle_mouse_move: function(engine, event){
@@ -115,7 +115,7 @@
     
     const world = World.create(4000, 4000);
     world.allow_negative = true;
-    const level_phase = {
+    const level_scene = {
       world,
       asset_loading_function: function(engine){
         engine.audio.add_to_group("bg", engine.assets.add_audio("bg3", "assets/bg3.mp3"));
@@ -215,7 +215,7 @@
       },
     };
 
-    game.set_phase(title_phase);
+    game.set_scene(title_scene);
     game.run();
   </script>
 </body>
