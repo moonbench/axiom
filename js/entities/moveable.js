@@ -68,7 +68,7 @@ const MoveableEntity = (function(){
 
     if(entity.state.rotate != 0){
       dampen_rotation(entity, dt);
-      entity.angle += entity.state.rotate * dt;
+      entity.angle += entity.state.rotate * entity.rotation * dt;
       entity.rotated = true;
     }
 
@@ -113,6 +113,7 @@ const MoveableEntity = (function(){
     entity.max_rotation_speed = Math.PI;
     entity.friction = 0.4;
     entity.acceleration = 1;
+    entity.rotation = 1;
     entity.acceleration_time = 1;
     entity.accelerations = {forward: false, reverse: false, left: false, right: false};
 
