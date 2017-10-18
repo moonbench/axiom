@@ -85,20 +85,20 @@
 
         entity_loading_function: function(world, assets){
           const bg = MoveableEntity.extend(
-            Sprite.create(world.width*5, world.height*5, world.height*2, world.width*2, 0, assets.images["title_bg"])
+            Sprite.create(0, 0, world.height*2, world.width*2, 0, assets.images["title_bg"])
           );
           bg.friction = 0;
           bg.state.rotate = 0.01;
           world.add_entity(bg, 10);
 
           const planet = MoveableEntity.extend(
-            Sprite.create(1300, 1200, 1500, 1500, 6, assets.images["title_planet"])
+            Sprite.create(400, 420, 1500, 1500, 6, assets.images["title_planet"])
           );
           planet.friction = 0;
           planet.state.rotate = 0.01;
           world.add_entity(planet, 75);
 
-          const title = Sprite.create(world.width/2, world.height/2, world.height/1.5, world.width/1.5, 0, assets.images["title"]);
+          const title = Sprite.create(0, 0, world.height/1.5, world.width/1.5, 0, assets.images["title"]);
           world.add_entity(title, 100);
         },
 
@@ -114,7 +114,7 @@
       };
     })();
 
-    
+
     const level_scene = (function(){
       const world = World.create(20000, 4000);
       world.allow_negative = true;
@@ -151,8 +151,7 @@
         },
         entity_loading_function: function(world, assets){
           const planet = Sprite.create(
-            game.engine.viewport.width*10,
-            game.engine.viewport.height*10,
+            0, 0,
             game.engine.viewport.height*1.5,
             game.engine.viewport.width*2.7,
             0,
@@ -168,11 +167,11 @@
           world.add_player_entity(car);
 
           const station = MoveableEntity.extend(
-            Sprite.create(-600, -800, 800, 800, 6, assets.images["station"])
+            Sprite.create(-600, -800, 500, 500, 6, assets.images["station"])
           );
           station.friction = 0;
           station.state.rotate = 0.02;
-          world.add_entity(station, 30);
+          world.add_entity(station, 20);
 
           for(var i = 0; i<100; i++){
             world.add_entity(DamageableEntity.extend(

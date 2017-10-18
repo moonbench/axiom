@@ -19,13 +19,13 @@ const Viewport = (function() {
   * Modifiers
   */
   function center_on(viewport, world_x, world_y){
-    if(world_x < viewport.limits.scrolling.min_x){ viewport.x = viewport.limits.scrolling.min_x - viewport.width/2; }
-    else if(world_x >= viewport.limits.scrolling.max_x){ viewport.x = viewport.limits.scrolling.max_x - viewport.width/2; }
-    else { viewport.x = world_x - viewport.width/2; }
+    if(world_x < viewport.limits.scrolling.min_x){ viewport.x = viewport.limits.scrolling.min_x; }
+    else if(world_x >= viewport.limits.scrolling.max_x){ viewport.x = viewport.limits.scrolling.max_x; }
+    else { viewport.x = world_x; }
 
-    if(world_y < viewport.limits.scrolling.min_y){ viewport.y = viewport.limits.scrolling.min_y - viewport.height/2; }
-    else if(world_y >= viewport.limits.scrolling.max_y){ viewport.y = viewport.limits.scrolling.max_y - viewport.height/2; }
-    else { viewport.y = world_y - viewport.height/2; }
+    if(world_y < viewport.limits.scrolling.min_y){ viewport.y = viewport.limits.scrolling.min_y; }
+    else if(world_y >= viewport.limits.scrolling.max_y){ viewport.y = viewport.limits.scrolling.max_y; }
+    else { viewport.y = world_y; }
   }
 
 
@@ -76,10 +76,10 @@ const Viewport = (function() {
         y: 0,
       };
 
-      viewport.adjusted_x = function(world_x, depth = 100){ return (world_x - viewport.x) * (depth/100) };
-      viewport.adjusted_y = function(world_y, depth = 100){ return (world_y - viewport.y) * (depth/100) };
-      viewport.x_to_world = function(viewport_x, depth = 100){ return (viewport.x + viewport_x) * (depth/100) };
-      viewport.y_to_world = function(viewport_y, depth = 100){ return (viewport.y + viewport_y) * (depth/100) };
+      viewport.adjusted_x = function(world_x, depth = 100){ return (viewport.width/2 + ((world_x - viewport.x)*(depth/100))) };
+      viewport.adjusted_y = function(world_y, depth = 100){ return (viewport.height/2 + ((world_y - viewport.y)*(depth/100))) };
+      viewport.x_to_world = function(viewport_x, depth = 100){ return (((viewport.x + viewport_x) * (depth/100))-viewport.width/2) };
+      viewport.y_to_world = function(viewport_y, depth = 100){ return (((viewport.y + viewport_y) * (depth/100))-viewport.height/2) };
 
       viewport.center_on = function(world_x, world_y){ center_on(viewport, world_x, world_y) };
 
