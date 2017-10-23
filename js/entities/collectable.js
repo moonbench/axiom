@@ -11,7 +11,7 @@ const CollectableEntity = (function(){
    */
   function extend(entity){
     entity.resolve_collisions = false;
-    
+
     const parent_resolve_collision = entity.resolve_collision || function(){};
     entity.resolve_collision = function(){
       resolve_collision(entity);
