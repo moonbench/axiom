@@ -40,10 +40,6 @@ const MissileEntity = (function(){
     entity.parent = null;
     entity.vector.magnitude = 750;
     entity.vector.angle = entity.angle;
-    entity.resolve_collisions = false;
-
-    const parent_update = entity.update;
-    entity.update = function(dt){ update(entity, dt); parent_update(dt) };
 
     const parent_check_collision_against = entity.check_collision_against;
     entity.check_collision_against = function(other_entity, no_checkback){
