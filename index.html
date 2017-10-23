@@ -58,6 +58,7 @@
   <script type="text/javascript" src="js/entities/shooting.js"></script>
   <script type="text/javascript" src="js/entities/missile.js"></script>
   <script type="text/javascript" src="js/entities/damageable.js"></script>
+  <script type="text/javascript" src="js/entities/collectable.js"></script>
   <script type="text/javascript" src="js/entities/particle.js"></script>
   <script type="text/javascript" src="js/entities/particle_emitter.js"></script>
 
@@ -165,6 +166,9 @@
           car.acceleration_time = 1;
           car.rotation = 4;
           world.add_player_entity(car);
+
+          const pickup = CollectableEntity.extend(SolidEntity.extend(Sprite.create(400, 400, 50, 100, 0, assets.images["laser1"])));
+          world.add_entity(pickup);
 
           const station = MoveableEntity.extend(
             Sprite.create(-600, -800, 500, 500, 6, assets.images["station"])

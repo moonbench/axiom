@@ -109,12 +109,8 @@ const Entity = (function (){
   }
 
   function reset(entity){
-    entity.something_within_radius = false;
-    entity.something_within_aabb = false;
-    entity.collision_checks = {};
-    entity.collisions = [];
-    entity.resolution_vector = false;
   }
+
   function normalize(entity){
     entity.angle = Util.normalize_angle(entity.angle);
     entity.max_radius = Math.sqrt( Math.pow(entity.width/2,2) + Math.pow(entity.height/2,2));
@@ -142,7 +138,7 @@ const Entity = (function (){
 
       entity.reset = function(){ reset(entity) };
       entity.normalize = function(){ normalize(entity) };
-      entity.update = function(){ reset(entity) };
+      entity.update = function(){ entity.reset() };
 
       entity.pre_render = function(viewport, ctx, dt){ pre_render(entity, viewport, ctx, dt) };
       entity.render = function(ctx, dt){ render(entity, ctx, dt) };
@@ -150,7 +146,6 @@ const Entity = (function (){
       entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt) };
 
       entity.check_collision_against = function(){};
-      entity.resolve_collision = function(){};
 
       return entity;
     }

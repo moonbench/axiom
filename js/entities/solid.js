@@ -108,6 +108,9 @@ const SolidEntity = (function(){
     axis_distance[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
     if(axis_distance[axis.length-1] === false) return false;
 
+    a.is_colliding = true;
+    b.is_colliding = true;
+
     // We are overlapping
     if(a.resolve_collisions && b.resolve_collisions) compute_resolutions(a, b, axis_distance);
 
@@ -116,6 +119,10 @@ const SolidEntity = (function(){
     return true;
   }
 
+  function update(entity, dt){
+    if(entity.is_colliding)
+      entity.resolve_collision();
+  }
 
 
   /*
@@ -133,20 +140,6 @@ const SolidEntity = (function(){
       ctx.stroke();
     });
     ctx.setLineDash([]);
-  }
-
-  function render_collisions(entity, ctx, dt){
-    ctx.lineWidth = 2;
-    let surface, normal;
-    entity.collisions.forEach(function(collision){
-      ctx.strokeStyle = "#DEDEDE";
-      ctx.strokeRect(collision.intersection_point[0]-2, collision.intersection_point[1]-2, 4, 4);
-
-      ctx.beginPath();
-      ctx.strokeStyle = "#F88402";
-      surface = Vector.create( collision.surface_angle, 20 );
-      normal = collision.resolution_vector;
-    });
   }
 
   function render_resolution_vector(entity, ctx, dt){
@@ -181,10 +174,17 @@ const SolidEntity = (function(){
     ctx.lineWidth = 1;
     ctx.strokeStyle = "#42a529";
     render_collision_checks(entity, ctx, dt);
-    render_collisions(entity, ctx, dt);
     render_resolution_vector(entity, ctx, dt);
   }
 
+
+  function reset(entity){
+    entity.is_colliding = false;
+    entity.something_within_radius = false;
+    entity.something_within_aabb = false;
+    entity.collision_checks = {};
+    entity.resolution_vector = false;
+  }
 
 
   /*
@@ -197,6 +197,17 @@ const SolidEntity = (function(){
     entity.check_collision_against = function(other_entity, no_checkback){ return check_collision_against(entity, other_entity, no_checkback)};
     const parent_render_debug = entity.render_debug;
     entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt); parent_render_debug(ctx, dt) };
+
+
+    entity.resolve_collision = function(){};
+
+    const parent_update = entity.update;
+    entity.update = function(dt){ update(entity, dt); parent_update(dt) };
+
+    const parent_reset = entity.reset;
+    entity.reset = function(){ reset(entity); parent_reset() };
+    reset(entity);
+
     return entity;
   }
 
