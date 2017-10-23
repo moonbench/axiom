@@ -15,7 +15,6 @@ const Layer = (function(){
     layer.pending_addition = [];
 
     layer.entities = layer.entities.concat(pending).map(function(entity){
-      entity.resolve_collision();
       entity.update(dt);
       if(layer.quadtree && entity.solid) layer.quadtree.add(entity);
       return entity;
