@@ -130,7 +130,6 @@ const Entity = (function (){
         dead: false,
         debug_level: 0,
       };
-      reset(entity);
       normalize(entity);
 
       entity.reset = function(){};
