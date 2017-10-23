@@ -13,8 +13,6 @@ const CollectableEntity = (function(){
    * Initialization
    */
   function extend(entity){
-    entity.resolve_collisions = false;
-
     const parent_update = entity.update;
     entity.update = function(dt){
       if(entity.collisions.length>0) handle_collision(entity);

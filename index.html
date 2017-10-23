@@ -209,9 +209,15 @@
           world.add_entity( Sprite.create(2900, 1900, 1400, 2200, 4.5, assets.images["ship2"]), 115);
           world.add_entity( Sprite.create(-2500, -1000, 1200, 1800, 1.5, assets.images["ship2"]), 108);
 
-          world.add_entity(SolidEntity.extend(Sprite.create(1220, 300, 100, 100, 1, assets.images["trash"] )));
-          world.add_entity(SolidEntity.extend(Sprite.create(1250, 150, 110, 110, 0.5, assets.images["trash"] )));
-          world.add_entity(SolidEntity.extend(Sprite.create(1300, 550, 80, 80, 3, assets.images["trash"] )));
+          world.add_entity(SolidEntity.extend(
+            CollidableEntity.extend(
+              Sprite.create(1220, 300, 100, 100, 1, assets.images["trash"]))));
+          world.add_entity(SolidEntity.extend(
+            CollidableEntity.extend(
+              Sprite.create(1250, 150, 75, 75, 0.5, assets.images["trash"]))));
+          world.add_entity(SolidEntity.extend(
+            CollidableEntity.extend(
+              Sprite.create(1300, 550, 150, 100, 3, assets.images["trash"]))));
         },
 
         handle_mouse_move: function(engine, event){

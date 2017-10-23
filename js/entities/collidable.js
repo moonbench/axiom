@@ -108,13 +108,9 @@ const CollidableEntity = (function(){
 
     check.is_colliding = true;
     a.collisions.push(check);
-    if(a.resolve_collisions && b.resolve_collisions) compute_resolutions(a, b, axis_distances);
+    if(a.solid && b.solid) compute_resolutions(a, b, axis_distances);
     if(!no_checkback) b.check_collision_against(a, true);
     return true;
-  }
-
-  function update(entity, dt){
-    if(entity.collisions.length>0 && entity.resolve_collisions) entity.resolve_collision();
   }
 
 
@@ -185,16 +181,10 @@ const CollidableEntity = (function(){
    */
   function extend(entity){
     entity.collidable = true;
-    entity.resolve_collisions = false;
 
     entity.check_collision_against = function(other_entity, no_checkback){ return check_collision_against(entity, other_entity, no_checkback)};
     const parent_render_debug = entity.render_debug;
     entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt); parent_render_debug(ctx, dt) };
-
-    entity.resolve_collision = function(){};
-
-    const parent_update = entity.update;
-    entity.update = function(dt){ update(entity, dt); parent_update(dt) };
 
     const parent_reset = entity.reset;
     entity.reset = function(){ reset(entity); parent_reset() };
