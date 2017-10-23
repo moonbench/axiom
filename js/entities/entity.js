@@ -108,9 +108,6 @@ const Entity = (function (){
     return entity;
   }
 
-  function reset(entity){
-  }
-
   function normalize(entity){
     entity.angle = Util.normalize_angle(entity.angle);
     entity.max_radius = Math.sqrt( Math.pow(entity.width/2,2) + Math.pow(entity.height/2,2));
@@ -136,7 +133,7 @@ const Entity = (function (){
       reset(entity);
       normalize(entity);
 
-      entity.reset = function(){ reset(entity) };
+      entity.reset = function(){};
       entity.normalize = function(){ normalize(entity) };
       entity.update = function(){ entity.reset() };
 
@@ -144,8 +141,6 @@ const Entity = (function (){
       entity.render = function(ctx, dt){ render(entity, ctx, dt) };
       entity.post_render = function(ctx, dt){ post_render(entity, ctx, dt) };
       entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt) };
-
-      entity.check_collision_against = function(){};
 
       return entity;
     }

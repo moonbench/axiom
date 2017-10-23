@@ -119,7 +119,12 @@ const MoveableEntity = (function(){
 
     entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
 
-    entity.update = function(dt){ entity.reset(); update(entity, dt); entity.normalize() };
+    const parent_update = entity.update;
+    entity.update = function(dt){
+      parent_update(dt);
+      update(entity, dt);
+      if(entity.rotated) entity.normalize();
+    };
     entity.turn_towards = function(x, y){ turn_towards(entity, x, y) };
 
     const parent_render = entity.render;
