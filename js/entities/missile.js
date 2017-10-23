@@ -9,7 +9,7 @@ const MissileEntity = (function(){
     }
   }
 
-  function check_collision_against_precheck(entity, other_entity, no_checkback){
+  function collision_precheck(entity, other_entity){
     if(other_entity == entity.parent) return false;
     if(other_entity.is_projectile) return false;
     return true;
@@ -18,6 +18,17 @@ const MissileEntity = (function(){
   function do_damage(entity, other_entity){
     entity.layer.world.engine.audio.play("hit");
     if(other_entity.inflict_damage) other_entity.inflict_damage(25);
+  }
+
+  function handle_impact(entity, other_entity){
+    do_damage(entity, other_entity);
+    entity.dead = true;
+    entity.layer.add_entity(ParticleEmitter.create(
+      entity.x+entity.corners.right[0],
+      entity.y+entity.corners.right[1],
+      entity.angle,
+      Math.PI/2
+    ));
   }
 
   function extend(entity, velocity){
@@ -35,18 +46,10 @@ const MissileEntity = (function(){
 
     const parent_check_collision_against = entity.check_collision_against;
     entity.check_collision_against = function(other_entity, no_checkback){
-      if(check_collision_against_precheck(entity, other_entity, no_checkback))
-        if(parent_check_collision_against(other_entity, no_checkback)){
-          do_damage(entity, other_entity);
-          entity.dead = true;
-          entity.layer.add_entity(ParticleEmitter.create(
-            entity.x+entity.corners.right[0],
-            entity.y+entity.corners.right[1],
-            entity.angle,
-            Math.PI/2
-            ));
-          return true;
-        }
+      if(collision_precheck(entity, other_entity) && parent_check_collision_against(other_entity, no_checkback)){
+        handle_impact(entity, other_entity);
+        return true;
+      }
       return false;
     };
 
