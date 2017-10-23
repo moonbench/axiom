@@ -2,8 +2,11 @@
 
 const CollectableEntity = (function(){
 
-  function resolve_collision(entity){
-    entity.dead = true;
+  function handle_collision(entity){
+    entity.collisions.forEach(function(collision){
+      if(collision.other_entity.is_selected)
+        entity.dead = true;
+    });
   }
 
   /*
@@ -12,11 +15,12 @@ const CollectableEntity = (function(){
   function extend(entity){
     entity.resolve_collisions = false;
 
-    const parent_resolve_collision = entity.resolve_collision || function(){};
-    entity.resolve_collision = function(){
-      resolve_collision(entity);
-      parent_resolve_collision();
+    const parent_update = entity.update;
+    entity.update = function(dt){
+      if(entity.collisions.length>0) handle_collision(entity);
+      parent_update(dt);
     }
+
     return entity;
   }
 

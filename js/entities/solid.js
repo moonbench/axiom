@@ -108,8 +108,7 @@ const SolidEntity = (function(){
     axis_distance[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
     if(axis_distance[axis.length-1] === false) return false;
 
-    a.is_colliding = true;
-    b.is_colliding = true;
+    a.collisions.push(a.collision_checks[key]);
 
     // We are overlapping
     if(a.resolve_collisions && b.resolve_collisions) compute_resolutions(a, b, axis_distance);
@@ -120,8 +119,7 @@ const SolidEntity = (function(){
   }
 
   function update(entity, dt){
-    if(entity.is_colliding)
-      entity.resolve_collision();
+    if(entity.collisions.length>0 && entity.resolve_collisions) entity.resolve_collision();
   }
 
 
@@ -179,16 +177,16 @@ const SolidEntity = (function(){
 
 
   function reset(entity){
-    entity.is_colliding = false;
     entity.something_within_radius = false;
     entity.something_within_aabb = false;
     entity.collision_checks = {};
+    entity.collisions = [];
     entity.resolution_vector = false;
   }
 
 
   /*
-   * Initialization
+   * Initializationupdate(entity, dt);
    */
   function extend(entity){
     entity.solid = true;
@@ -197,7 +195,6 @@ const SolidEntity = (function(){
     entity.check_collision_against = function(other_entity, no_checkback){ return check_collision_against(entity, other_entity, no_checkback)};
     const parent_render_debug = entity.render_debug;
     entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt); parent_render_debug(ctx, dt) };
-
 
     entity.resolve_collision = function(){};
 
