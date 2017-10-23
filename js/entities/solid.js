@@ -70,41 +70,52 @@ const SolidEntity = (function(){
     }
   }
 
-  function check_collision_against(a, b, no_checkback){
-    const key = b.x + "." + b.y + "." + b.angle.toFixed(3) + "." + b.width + "." + b.height;
-    if(a.collision_checks[key] != undefined) return a.collision_checks[key].is_colliding;
-    a.collision_checks[key] = {other_entity: b, is_colliding: false};
+  function entities_are_sat_colliding(a, b, axis_distances){
+    const axis = [];
+    axis.push([a.corners.top_right[0] - a.corners.top_left[0], a.corners.top_right[1] - a.corners.top_left[1]]);
+    axis_distances[axis.length-1] = penetration_distance(a, b, axis[axis.length-1]);
+    if(axis_distances[axis.length-1] === false) return false;
 
+    axis.push([a.corners.top_right[0] - a.corners.bottom_right[0], a.corners.top_right[1] - a.corners.bottom_right[1]]);
+    axis_distances[axis.length-1] = penetration_distance(a, b, axis[axis.length-1]);
+    if(axis_distances[axis.length-1] === false) return false;
+
+    axis.push([b.corners.top_right[0] - b.corners.top_left[0], b.corners.top_right[1] - b.corners.top_left[1]]);
+    axis_distances[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
+    if(axis_distances[axis.length-1] === false) return false;
+
+    axis.push([b.corners.top_right[0] - b.corners.bottom_right[0], b.corners.top_right[1] - b.corners.bottom_right[1]]);
+    axis_distances[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
+    if(axis_distances[axis.length-1] === false) return false;
+
+    return true;
+  }
+
+  function check_collision_against(a, b, no_checkback){
+    const key = b.current_key();
+
+    // If we've already run this check, return that result
+    if(a.collision_checks[key] != undefined) return a.collision_checks[key].is_colliding;
+
+    const check = a.collision_checks[key] = {other_entity: b, is_colliding: false};
+
+    // Quick and easy checks
     if(!a.solid || !b.solid) return false;
     if(!a.moveable && !b.moveable) return false;
     if(a.dead || b.dead) return false;
+
+    // Simple distance checks
     if(!entities_are_close_to_colliding(a,b)) return false;
 
-    const axis = [];
-    const axis_distance = [];
-    axis.push([a.corners.top_right[0] - a.corners.top_left[0], a.corners.top_right[1] - a.corners.top_left[1]]);
-    axis_distance[axis.length-1] = penetration_distance(a, b, axis[axis.length-1]);
-    if(axis_distance[axis.length-1] === false) return false;
+    // More complex SAT check
+    const axis_distances = [];
+    if(!entities_are_sat_colliding(a, b, axis_distances)) return false;
 
-    axis.push([a.corners.top_right[0] - a.corners.bottom_right[0], a.corners.top_right[1] - a.corners.bottom_right[1]]);
-    axis_distance[axis.length-1] = penetration_distance(a, b, axis[axis.length-1]);
-    if(axis_distance[axis.length-1] === false) return false;
-
-    axis.push([b.corners.top_right[0] - b.corners.top_left[0], b.corners.top_right[1] - b.corners.top_left[1]]);
-    axis_distance[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
-    if(axis_distance[axis.length-1] === false) return false;
-
-    axis.push([b.corners.top_right[0] - b.corners.bottom_right[0], b.corners.top_right[1] - b.corners.bottom_right[1]]);
-    axis_distance[axis.length-1] = penetration_distance(b, a, axis[axis.length-1]);
-    if(axis_distance[axis.length-1] === false) return false;
-
-    a.collisions.push(a.collision_checks[key]);
-
-    // We are overlapping
-    if(a.resolve_collisions && b.resolve_collisions) compute_resolutions(a, b, axis_distance);
-
+    // We're colliding
+    check.is_colliding = true;
+    a.collisions.push(check);
+    if(a.resolve_collisions && b.resolve_collisions) compute_resolutions(a, b, axis_distances);
     if(!no_checkback) b.check_collision_against(a, true);
-    a.collision_checks[key].is_colliding = true;
     return true;
   }
 

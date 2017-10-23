@@ -116,6 +116,12 @@ const Entity = (function (){
     set_edges(entity);
   }
 
+  function create_location_key(entity){
+    return entity.x.toFixed(3) + "." + entity.y.toFixed(3) +
+      "." + entity.angle.toFixed(3) +
+      "." + entity.width + "." + entity.height;
+  }
+
   /*
   * Public methods
   */
@@ -140,6 +146,8 @@ const Entity = (function (){
       entity.render = function(ctx, dt){ render(entity, ctx, dt) };
       entity.post_render = function(ctx, dt){ post_render(entity, ctx, dt) };
       entity.render_debug = function(ctx, dt){ render_debug(entity, ctx, dt) };
+
+      entity.current_key = function(){ return create_location_key(entity) };
 
       return entity;
     }
