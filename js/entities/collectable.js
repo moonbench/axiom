@@ -26,7 +26,7 @@ const CollectableEntity = (function(){
 
   return {
     create: function(world_x, world_y, width, height, angle) {
-      return extend(SolidEntity.create(world_x, world_y, width, height, angle));
+      return extend(CollidableEntity.create(world_x, world_y, width, height, angle));
     },
     extend,
   }

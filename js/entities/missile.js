@@ -10,6 +10,7 @@ const MissileEntity = (function(){
   }
 
   function collision_precheck(entity, other_entity){
+    if(!other_entity.solid) return false;
     if(other_entity == entity.parent) return false;
     if(other_entity.is_projectile) return false;
     return true;
@@ -57,7 +58,7 @@ const MissileEntity = (function(){
   }
   return {
     create: function(x, y, width, height, angle, velocity){
-      return extend(MoveableEntity.extend(SolidEntity.create(x, y, width, height, angle)), velocity);
+      return extend(MoveableEntity.extend(CollidableEntity.create(x, y, width, height, angle)), velocity);
     },
     extend,
   }
