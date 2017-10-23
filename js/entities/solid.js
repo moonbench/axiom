@@ -5,32 +5,22 @@ const SolidEntity = (function(){
    * Collision check
    */
   function entities_within_radius_bounds(entity1, entity2){
-    return Math.sqrt( Math.pow(entity2.y - entity1.y, 2) + Math.pow(entity2.x - entity1.x, 2)) <= entity1.max_radius + entity2.max_radius;
+    return Math.sqrt(Math.pow(entity2.y - entity1.y, 2) + Math.pow(entity2.x - entity1.x, 2)) <= entity1.max_radius + entity2.max_radius;
   }
 
   function entities_within_aabb_bounds(entity1, entity2){
-    const entity_max_x = entity1.x + entity1.max.x,
-        entity_max_y = entity1.y + entity1.max.y;
-    const entity_min_x = entity1.x + entity1.min.x,
-        entity_min_y = entity1.y + entity1.min.y;
-    const other_entity_max_x = entity2.x + entity2.max.x,
-        other_entity_max_y = entity2.y + entity2.max.y;
-    const other_entity_min_x = entity2.x + entity2.min.x,
-        other_entity_min_y = entity2.y + entity2.min.y;
-    return entity_max_x > other_entity_min_x &&
-      entity_max_y > other_entity_min_y &&
-      entity_min_x < other_entity_max_x &&
-      entity_min_y < other_entity_max_y;
+    return entity1.x + entity1.max.x > entity2.x + entity2.min.x && // 1 max x > 2 min x
+           entity1.y + entity1.max.y > entity2.y + entity2.min.y && // 1 max y > 2 min y
+           entity1.x + entity1.min.x < entity2.x + entity2.max.x && // 1 min x < 2 max x
+           entity1.y + entity1.min.y < entity2.y + entity2.max.y; // 1 min y < 2 max y
   }
 
   function entities_are_close_to_colliding(a, b){
-    const within_radius = entities_within_radius_bounds(a, b);
-    if(!within_radius) return false;
+    if(!entities_within_radius_bounds(a, b)) return false;
     a.something_within_radius = true;
     b.something_within_radius = true;
 
-    const within_aabb = entities_within_aabb_bounds(a, b);
-    if(!within_aabb) return false;
+    if(!entities_within_aabb_bounds(a, b)) return false;
     a.something_within_aabb = true;
     b.something_within_aabb = true;
 
