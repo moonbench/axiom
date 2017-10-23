@@ -16,7 +16,7 @@ const Layer = (function(){
 
     layer.entities = layer.entities.concat(pending).map(function(entity){
       entity.update(dt);
-      if(layer.quadtree && entity.solid) layer.quadtree.add(entity);
+      if(layer.quadtree && entity.collidable) layer.quadtree.add(entity);
       return entity;
     }).filter(function(entity){
       return entity.dead == false;

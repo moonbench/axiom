@@ -52,6 +52,7 @@
 
   <script type="text/javascript" src="js/entities/entity.js"></script>
   <script type="text/javascript" src="js/entities/sprite.js"></script>
+  <script type="text/javascript" src="js/entities/collidable.js"></script>
   <script type="text/javascript" src="js/entities/solid.js"></script>
   <script type="text/javascript" src="js/entities/moveable.js"></script>
   <script type="text/javascript" src="js/entities/driveable.js"></script>
@@ -160,14 +161,14 @@
             );
           world.add_entity(planet, 5);
 
-          const car = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(Sprite.create(0, 0, 60, 65, Math.PI, assets.images["test"])))));
+          const car = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(CollidableEntity.extend(Sprite.create(0, 0, 60, 65, Math.PI, assets.images["test"]))))));
           car.is_selected = true;
           car.acceleration = 7;
           car.acceleration_time = 1;
           car.rotation = 4;
           world.add_player_entity(car);
 
-          const pickup = CollectableEntity.extend(SolidEntity.extend(Sprite.create(400, 400, 50, 100, 0, assets.images["laser1"])));
+          const pickup = CollectableEntity.extend(CollidableEntity.extend(Sprite.create(400, 400, 50, 100, 0, assets.images["laser1"])));
           world.add_entity(pickup);
 
           const station = MoveableEntity.extend(
@@ -181,12 +182,14 @@
             world.add_entity(DamageableEntity.extend(
               MoveableEntity.extend(
                 SolidEntity.extend(
-                  Sprite.create(-20000+Math.random()*40000,
-                    -1000+Math.random()*2000,
-                    90,
-                    120,
-                    Math.random()*Math.PI*2,
-                    assets.images["ship1"])
+                  CollidableEntity.extend(
+                    Sprite.create(-20000+Math.random()*40000,
+                      -1000+Math.random()*2000,
+                      90,
+                      120,
+                      Math.random()*Math.PI*2,
+                      assets.images["ship1"])
+                    )
                   )
                 )
               )

@@ -25,7 +25,7 @@ const Gun = (function(){
   function shoot_from(gun){
     let shot = MissileEntity.extend(
       MoveableEntity.extend(
-        SolidEntity.extend(
+        CollidableEntity.extend(
           Sprite.create(gun.parent.x, gun.parent.y, 10, 100, gun.parent.angle, gun.parent.layer.world.engine.assets.images["laser1"])
         )
       )
