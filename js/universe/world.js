@@ -49,6 +49,11 @@ const World = (function (){
       layer.handle_key(event, pressed);
     });
   }
+  function handle_gamepad(world, gamepad){
+    world.layers.filter(function(layer){ return layer.physics; }).forEach(function(layer){
+      layer.handle_gamepad(gamepad);
+    });
+  }
 
   return {
     create: function(width, height){
@@ -67,6 +72,7 @@ const World = (function (){
 
       world.handle_mouse_button = function(event, pressed){ handle_mouse_button(world, event, pressed) };
       world.handle_key = function(event, pressed){ handle_key(world, event, pressed) };
+      world.handle_gamepad = function(gamepad){ handle_gamepad(world, gamepad) };
 
       return world;
     }

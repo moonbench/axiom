@@ -21,6 +21,7 @@ const Game = (function(){
     game.engine.handle_key = scene.handle_key;
     game.engine.handle_mouse_move = scene.handle_mouse_move;
     game.engine.handle_mouse_button = scene.handle_mouse_button;
+    game.engine.handle_gamepad = scene.handle_gamepad;
   }
 
   return {

@@ -5,33 +5,33 @@ const MoveableEntity = (function(){
   /*
    * Movement
    */
-  function accelerate(entity, acceleration, dt){
+  function accelerate(entity, acceleration, percent, dt){
     if(!acceleration) acceleration = {magnitude: 0, time: 0};
     if(acceleration.time < entity.acceleration_time) acceleration.time = Math.min(acceleration.time + dt, entity.acceleration_time);
-    acceleration.magnitude = Ease.outQuad(acceleration.time, 0, entity.acceleration, entity.acceleration_time);
+    acceleration.magnitude = Ease.outQuad(acceleration.time, 0, entity.acceleration * percent, entity.acceleration_time);
     return acceleration;
 
   }
   function acceleration_vector(entity, dt){
     const vector = Vector.create(0,0);
 
-    if(entity.state.forward){
-      entity.accelerations.forward = accelerate(entity, entity.accelerations.forward, dt);
+    if(entity.state.forward != 0){
+      entity.accelerations.forward = accelerate(entity, entity.accelerations.forward, entity.state.forward, dt);
       vector.add(entity.angle, entity.accelerations.forward.magnitude);
     } else if(entity.accelerations.forward){ entity.accelerations.forward = false }
 
-    if(entity.state.reverse){
-      entity.accelerations.reverse = accelerate(entity, entity.accelerations.reverse, dt);
+    if(entity.state.reverse != 0){
+      entity.accelerations.reverse = accelerate(entity, entity.accelerations.reverse, entity.state.reverse, dt);
       vector.add(entity.angle+Math.PI, entity.accelerations.reverse.magnitude);
     } else if(entity.accelerations.reverse){ entity.accelerations.reverse = false }
 
-    if(entity.state.left){
-      entity.accelerations.left = accelerate(entity, entity.accelerations.left, dt);
+    if(entity.state.left != 0){
+      entity.accelerations.left = accelerate(entity, entity.accelerations.left, entity.state.left, dt);
       vector.add(entity.angle-Math.PI/2, entity.accelerations.left.magnitude);
     } else if(entity.accelerations.left){ entity.accelerations.left = false }
 
-    if(entity.state.right){
-      entity.accelerations.right = accelerate(entity, entity.accelerations.right, dt);
+    if(entity.state.right != 0){
+      entity.accelerations.right = accelerate(entity, entity.accelerations.right, entity.state.right, dt);
       vector.add(entity.angle+Math.PI/2, entity.accelerations.right.magnitude);
     } else if(entity.accelerations.right){ entity.accelerations.right = false }
 
@@ -117,7 +117,7 @@ const MoveableEntity = (function(){
     entity.acceleration_time = 1;
     entity.accelerations = {forward: false, reverse: false, left: false, right: false};
 
-    entity.state = {forward: false, reverse: false, left: false, right: false, rotate: 0};
+    entity.state = {forward: 0, reverse: 0, left: 0, right: 0, rotate: 0};
 
     const parent_update = entity.update;
     entity.update = function(dt){

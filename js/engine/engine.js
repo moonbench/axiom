@@ -7,6 +7,7 @@ const Engine = (function(){
   */
   function update(engine, dt){
     engine.world.update(dt);
+    if(engine.gamepad) engine.handle_gamepad(engine, engine.gamepad);
   }
   function render(engine, dt){
     engine.viewport.clear(engine.ctx, engine.remainder);
@@ -56,6 +57,15 @@ const Engine = (function(){
     });
   }
 
+  function bind_gamepad(engine){
+    window.addEventListener("gamepadconnected", function(event) {
+      engine.gamepad = event.gamepad;
+    });
+    window.addEventListener("gamepaddisconnected", function(event) {
+      engine.gamepad = null;
+    });
+  }
+
   function update_timing(engine){
     engine.step = 1/engine.fps;
     engine.slowstep = engine.slow * engine.step;
@@ -79,12 +89,14 @@ const Engine = (function(){
       };
       update_timing(engine);
       bind_user_inputs(engine);
+      bind_gamepad(engine);
+
       engine.audio = AudioEmitter.create();
       engine.assets = AssetDepot.create();
       engine.ctx = engine.canvas.getContext("2d");
       engine.meter = Meter.create(engine, fps_meter_id);
       engine.viewport = Viewport.create(engine.canvas);
-      engine.cursor = Cursor.create(engine.viewport.width/2, engine.viewport.height/2);      
+      engine.cursor = Cursor.create(engine.viewport.width/2, engine.viewport.height/2);
 
       engine.run = function(){
         requestAnimationFrame( function(){
