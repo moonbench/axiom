@@ -113,6 +113,10 @@
           const adjusted_y = event.clientY - engine.canvas.getBoundingClientRect().top;
           engine.cursor.move_to(adjusted_x, adjusted_y);
         },
+
+        handle_gamepad: function(engine, gamepad){
+          engine.world.handle_gamepad(gamepad);
+        },
       };
     })();
 
@@ -201,7 +205,7 @@
           world.add_entity( Sprite.create(5000, 1900, 300, 600, 4.1, assets.images["ship3"]), 18);
 
           const some_ship = MoveableEntity.extend(Sprite.create(510, 3000, 400, 800, 3.4, assets.images["ship4"]));
-          some_ship.state.forward = true;
+          some_ship.state.forward = 1;
           some_ship.acceleration = 0.5;
           some_ship.acceleration_time = 20;
           world.add_entity(some_ship, 26);
@@ -233,6 +237,10 @@
         handle_mouse_button: function(engine, event, pressed){
           engine.cursor.set_pressed(pressed);
           engine.world.handle_mouse_button(event, pressed);
+        },
+
+        handle_gamepad: function(engine, gamepad){
+          engine.world.handle_gamepad(gamepad);
         },
       };
     })();
