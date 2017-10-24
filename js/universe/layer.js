@@ -76,7 +76,7 @@ const Layer = (function(){
     layer.quadtree.layer = layer;
   }
   return {
-    create: function(depth = 100, world, physics = false){
+    create: function(depth = 100, world){
       var layer = {
         depth,
         world,
@@ -96,7 +96,6 @@ const Layer = (function(){
       layer.handle_gamepad = function(gamepad){ handle_gamepad(layer, gamepad) };
 
       layer.enable_physics = function(){ enable_physics(layer) };
-      if(physics) layer.enable_physics();
 
       return layer;
     }
