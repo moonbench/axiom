@@ -15,12 +15,7 @@ const World = (function (){
   }
 
   function add_player_entity_to_layer(world, entity, layer_depth){
-    let layer = world.layers.find(function(layer){ return layer.depth == layer_depth });
-    if(!layer){
-      layer = Layer.create(layer_depth, world);
-      world.layers.push(layer);
-      sort_layers(world);
-    }
+    const layer = find_or_create_world_layer(world, layer_depth);
     if(!layer.physics){
       layer.enable_physics();
       world.physics_layers.push(layer);
@@ -28,13 +23,16 @@ const World = (function (){
     layer.add_player_entity(entity);
   }
   function add_entity_to_layer(world, entity, layer_depth){
-    let layer = world.layers.find(function(layer){ return layer.depth == layer_depth });
+    find_or_create_world_layer(world, layer_depth).add_entity(entity);
+  }
+  function find_or_create_world_layer(world, depth){
+    let layer = world.layers.find(function(layer){ return layer.depth == depth });
     if(!layer){
-      layer = Layer.create(layer_depth, world);
+      layer = Layer.create(depth, world);
       world.layers.push(layer);
       sort_layers(world);
     }
-    layer.add_entity(entity);
+    return layer;
   }
   function sort_layers(world){
     world.layers.sort(function(layer1, layer2){
