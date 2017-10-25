@@ -83,13 +83,13 @@
       return {
         world: World.create(game.engine.viewport.width, game.engine.viewport.height),
 
-        asset_loading_function: function(engine){
+        load_assets: function(engine){
           engine.assets.add_image("title_bg", "assets/titlebg.png");
           engine.assets.add_image("title_planet", "assets/titleplanet.png");
           engine.assets.add_image("title", "assets/title.png");
         },
 
-        entity_loading_function: function(world, assets){
+        load_entities: function(world, assets){
           const bg = MoveableEntity.extend(
             Sprite.create(0, 0, world.height*2, world.width*2, 0, assets.images["title_bg"])
           );
@@ -108,6 +108,8 @@
           world.add_entity(title, 100);
         },
 
+        update: function(engine){},
+
         handle_mouse_button: function(engine, event, pressed){
           if(pressed) start_game();
         },
@@ -125,10 +127,12 @@
 
     const level_scene = (function(){
       const world = World.create(20000, 4000);
+      let player;
+
       world.allow_negative = true;
       return {
         world,
-        asset_loading_function: function(engine){
+        load_assets: function(engine){
           engine.audio.add_to_group("bg", engine.assets.add_audio("bg3", "assets/bg3.mp3"));
           engine.audio.add_to_group("bg", engine.assets.add_audio("bg2", "assets/bg2.mp3"));
           engine.audio.add_to_group("bg", engine.assets.add_audio("bg1", "assets/bg.mp3"));
@@ -157,7 +161,7 @@
           engine.assets.add_image("ship4", "assets/ship4.png");
           engine.assets.add_image("trash", "assets/trash.png");
         },
-        entity_loading_function: function(world, assets){
+        load_entities: function(world, assets){
           const planet = Sprite.create(
             0, 0,
             game.engine.viewport.height*1.5,
@@ -167,12 +171,12 @@
             );
           world.add_entity(planet, 5);
 
-          const car = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(CollidableEntity.extend(Sprite.create(0, 0, 60, 65, Math.PI, assets.images["test"]))))));
-          car.is_selected = true;
-          car.acceleration = 7;
-          car.acceleration_time = 1;
-          car.rotation = 4;
-          world.add_player_entity(car);
+          player = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(CollidableEntity.extend(Sprite.create(0, 0, 60, 65, Math.PI, assets.images["test"]))))));
+          player.is_selected = true;
+          player.acceleration = 7;
+          player.acceleration_time = 1;
+          player.rotation = 4;
+          world.add_player_entity(player);
 
           const pickup = CollectableEntity.extend(CollidableEntity.extend(Sprite.create(400, 400, 50, 100, 0, assets.images["laser1"])));
           world.add_entity(pickup);
@@ -224,6 +228,14 @@
           world.add_entity(SolidEntity.extend(
             CollidableEntity.extend(
               Sprite.create(1300, 550, 150, 100, 3, assets.images["trash"]))));
+        },
+
+        update: function(engine, dt){
+          player.turn_towards(
+            engine.viewport.x_to_world(engine.cursor.x),
+            engine.viewport.y_to_world(engine.cursor.y)
+          );
+          engine.viewport.center_on(player.x, player.y);
         },
 
         handle_mouse_move: function(engine, event){

@@ -11,8 +11,9 @@ const Game = (function(){
 
   function set_scene(game, scene){
     game.engine.set_world(scene.world);
-    game.load_assets(scene.asset_loading_function);
-    game.load_entities(scene.entity_loading_function);
+    game.load_assets(scene.load_assets);
+    game.load_entities(scene.load_entities);
+    game.engine.scene_update = scene.update;
     game.engine.handle_key = scene.handle_key;
     game.engine.handle_mouse_move = scene.handle_mouse_move;
     game.engine.handle_mouse_button = scene.handle_mouse_button;
