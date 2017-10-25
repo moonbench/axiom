@@ -45,24 +45,6 @@ const Layer = (function(){
     layer.pending_addition.push(entity);
   }
 
-  function handle_mouse_button(layer, event, pressed){
-    layer.player_entities.forEach(function(entity){
-      if(entity.handle_mouse_button) entity.handle_mouse_button(event, pressed);
-    });
-  }
-
-  function handle_key(layer, event, pressed){
-    layer.player_entities.forEach(function(entity){
-      entity.handle_key(event, pressed);
-    });
-  }
-
-  function handle_gamepad(layer, gamepad){
-    layer.player_entities.forEach(function(entity){
-      entity.handle_gamepad(gamepad);
-    })
-  }
-
   function enable_physics(layer){
     layer.physics = true;
     layer.quadtree = QuadTree.create(layer);
@@ -83,10 +65,6 @@ const Layer = (function(){
 
       layer.update = function(dt){ update(layer, dt); };
       layer.render = function(ctx, dt){ render(layer, ctx, dt); };
-
-      layer.handle_mouse_button = function(event, pressed){ handle_mouse_button(layer, event, pressed) };
-      layer.handle_key = function(event, pressed){ handle_key(layer, event, pressed) };
-      layer.handle_gamepad = function(gamepad){ handle_gamepad(layer, gamepad) };
 
       layer.enable_physics = function(){ enable_physics(layer) };
 
