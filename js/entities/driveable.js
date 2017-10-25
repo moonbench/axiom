@@ -15,11 +15,22 @@ const DriveableEntity = (function(){
     entity.state.reverse = gamepad.axes[1] > 0 ? gamepad.axes[1] : 0;
     entity.state.left = gamepad.axes[0] < 0 ? -gamepad.axes[0] : 0;
     entity.state.right = gamepad.axes[0] > 0 ? gamepad.axes[0] : 0;
+
+    entity.state.rotate = gamepad.axes[3];
   }
 
   function extend(entity){
-    entity.handle_key = function(key, pressed){ handle_key(entity, key, pressed) };
-    entity.handle_gamepad = function(gamepad){ handle_gamepad(entity, gamepad) };
+    const parent_handle_key = entity.handle_key;
+    entity.handle_key = function(key, pressed){
+      handle_key(entity, key, pressed);
+      if(parent_handle_key) parent_handle_key(key, pressed);
+    };
+
+    const parent_handle_gamepad = entity.handle_gamepad;
+    entity.handle_gamepad = function(gamepad){
+      handle_gamepad(entity, gamepad);
+      if(parent_handle_gamepad) parent_handle_gamepad(gamepad);
+    };
     return entity;
   }
 

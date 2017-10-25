@@ -113,7 +113,6 @@
         handle_mouse_button: function(event, pressed){
           if(pressed) start_game();
         },
-
         handle_mouse_move: function(){},
 
         handle_gamepad: function(gamepad){
@@ -229,10 +228,12 @@
         },
 
         update: function(engine, dt){
-          player.turn_towards(
-            engine.viewport.x_to_world(engine.cursor.x),
-            engine.viewport.y_to_world(engine.cursor.y)
-          );
+          if(!engine.gamepad){
+            player.turn_towards(
+              engine.viewport.x_to_world(engine.cursor.x),
+              engine.viewport.y_to_world(engine.cursor.y)
+            );
+          }
           engine.viewport.center_on(player.x, player.y);
         },
 
