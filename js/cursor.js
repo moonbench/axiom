@@ -1,11 +1,16 @@
 "use strict";
 
 const Cursor = (function(){
+  function handle_mouse_move(cursor, event){
+    const adjusted_x = event.clientX - cursor.canvas.getBoundingClientRect().left;
+    const adjusted_y = event.clientY - cursor.canvas.getBoundingClientRect().top;
+    cursor.move_to(adjusted_x, adjusted_y);
+  }
+
   function move_cursor_to(cursor, x, y){
     cursor.x = x;
     cursor.y = y;
   }
-
 
   function render_cursor(cursor, ctx, dt){
     if(cursor.debug_level<1) return;
@@ -19,14 +24,16 @@ const Cursor = (function(){
 
 
   return {
-    create: function(x, y){
+    create: function(x, y, canvas){
       const cursor = {
         x,
         y,
         pressed: false,
+        canvas,
         debug_level: 1,
       };
 
+      cursor.handle_mouse_move = function(event){ handle_mouse_move(cursor, event) };
       cursor.move_to = function(x, y){ move_cursor_to(cursor, x, y) };
       cursor.set_pressed = function(is_pressed){ cursor.pressed = !!is_pressed };
 

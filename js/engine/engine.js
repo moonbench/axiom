@@ -96,7 +96,7 @@ const Engine = (function(){
       engine.ctx = engine.canvas.getContext("2d");
       engine.meter = Meter.create(engine, fps_meter_id);
       engine.viewport = Viewport.create(engine.canvas);
-      engine.cursor = Cursor.create(engine.viewport.width/2, engine.viewport.height/2);
+      engine.cursor = Cursor.create(engine.viewport.width/2, engine.viewport.height/2, engine.canvas);
 
       engine.run = function(){
         requestAnimationFrame( function(){
