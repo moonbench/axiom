@@ -35,6 +35,7 @@ const MissileEntity = (function(){
   function extend(entity, velocity){
     entity.is_projectile = true;
     entity.state.forward = 1;
+    entity.friction = 0;
     entity.age = 0;
     entity.max_age = 2.5;
     entity.parent = null;
