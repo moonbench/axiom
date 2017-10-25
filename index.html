@@ -76,6 +76,10 @@
     const game = Game.create("game_canvas", "fps_meter");
 
     const title_scene = (function(){
+      function start_game(){
+        game.set_scene(level_scene);
+      }
+
       return {
         world: World.create(game.engine.viewport.width, game.engine.viewport.height),
 
@@ -105,13 +109,11 @@
         },
 
         handle_mouse_button: function(engine, event, pressed){
-          if(pressed) game.set_scene(level_scene);
+          if(pressed) start_game();
         },
 
         handle_mouse_move: function(engine, event){
-          const adjusted_x = event.clientX - engine.canvas.getBoundingClientRect().left;
-          const adjusted_y = event.clientY - engine.canvas.getBoundingClientRect().top;
-          engine.cursor.move_to(adjusted_x, adjusted_y);
+          engine.cursor.handle_mouse_move(event);
         },
 
         handle_gamepad: function(engine, gamepad){
@@ -225,9 +227,7 @@
         },
 
         handle_mouse_move: function(engine, event){
-          const adjusted_x = event.clientX - engine.canvas.getBoundingClientRect().left;
-          const adjusted_y = event.clientY - engine.canvas.getBoundingClientRect().top;
-          engine.cursor.move_to(adjusted_x, adjusted_y);
+          engine.cursor.handle_mouse_move(event);
         },
 
         handle_key: function(engine, event, pressed){
