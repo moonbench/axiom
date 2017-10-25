@@ -42,19 +42,20 @@ const Engine = (function(){
   */
   function bind_user_inputs(engine){
     document.addEventListener("keydown", function(event){
-      if(engine.handle_key) engine.handle_key(engine, event, true)
+      if(engine.handle_key) engine.handle_key(event, true)
     }, false);
     document.addEventListener("keyup", function(event){
-      if(engine.handle_key) engine.handle_key(engine, event, false)
+      if(engine.handle_key) engine.handle_key(event, false)
     }, false);
     engine.canvas.addEventListener("mousemove", function(event){
-      if(engine.handle_mouse_move) engine.handle_mouse_move(engine, event)
+      engine.cursor.handle_mouse_move(event);
+      if(engine.handle_mouse_move) engine.handle_mouse_move(event)
     });
     engine.canvas.addEventListener("mousedown", function(event){
-      if(engine.handle_mouse_button) engine.handle_mouse_button(engine, event, true)
+      if(engine.handle_mouse_button) engine.handle_mouse_button(event, true)
     });
     engine.canvas.addEventListener("mouseup", function(event){
-      if(engine.handle_mouse_button) engine.handle_mouse_button(engine, event, false)
+      if(engine.handle_mouse_button) engine.handle_mouse_button(event, false)
     });
   }
 

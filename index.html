@@ -108,18 +108,16 @@
           world.add_entity(title, 100);
         },
 
-        update: function(engine){},
+        update: function(){},
 
-        handle_mouse_button: function(engine, event, pressed){
+        handle_mouse_button: function(event, pressed){
           if(pressed) start_game();
         },
 
-        handle_mouse_move: function(engine, event){
-          engine.cursor.handle_mouse_move(event);
-        },
+        handle_mouse_move: function(){},
 
-        handle_gamepad: function(engine, gamepad){
-          engine.world.handle_gamepad(gamepad);
+        handle_gamepad: function(gamepad){
+          if(gamepad.buttons[0].pressed) start_game();
         },
       };
     })();
@@ -238,21 +236,18 @@
           engine.viewport.center_on(player.x, player.y);
         },
 
-        handle_mouse_move: function(engine, event){
-          engine.cursor.handle_mouse_move(event);
+        handle_mouse_move: function(){},
+
+        handle_key: function(event, pressed){
+          player.handle_key(event, pressed);
         },
 
-        handle_key: function(engine, event, pressed){
-          engine.world.handle_key(event, pressed);
+        handle_mouse_button: function(event, pressed){
+          player.handle_mouse_button(event, pressed);
         },
 
-        handle_mouse_button: function(engine, event, pressed){
-          engine.cursor.set_pressed(pressed);
-          engine.world.handle_mouse_button(event, pressed);
-        },
-
-        handle_gamepad: function(engine, gamepad){
-          engine.world.handle_gamepad(gamepad);
+        handle_gamepad: function(gamepad){
+          player.handle_gamepad(gamepad);
         },
       };
     })();
