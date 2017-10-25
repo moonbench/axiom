@@ -9,13 +9,8 @@ const Game = (function(){
     load_function(world, assets);
   }
 
-  function set_world(game, world){
-    game.world = world;
-    game.engine.set_world(world);
-  }
-
   function set_scene(game, scene){
-    set_world(game, scene.world);
+    game.engine.set_world(scene.world);
     game.load_assets(scene.asset_loading_function);
     game.load_entities(scene.entity_loading_function);
     game.engine.handle_key = scene.handle_key;
@@ -31,7 +26,7 @@ const Game = (function(){
       };
 
       game.load_assets = function(load_function){ load_assets(game.engine, load_function) };
-      game.load_entities = function(load_function){ load_entities(game.world, game.engine.assets, load_function) };
+      game.load_entities = function(load_function){ load_entities(game.engine.world, game.engine.assets, load_function) };
       game.set_scene = function(scene){ set_scene(game, scene) };
 
       game.run = function(){ game.engine.run() };
