@@ -3,13 +3,6 @@
 const Layer = (function(){
 
   function update(layer, dt){
-    layer.player_entities.forEach(function(entity){
-      entity.turn_towards(
-        layer.world.engine.viewport.x_to_world(layer.world.engine.cursor.x, layer.depth),
-        layer.world.engine.viewport.y_to_world(layer.world.engine.cursor.y, layer.depth));
-      layer.world.engine.viewport.center_on(entity.x, entity.y);
-    });
-
     if(layer.quadtree) layer.quadtree.reset();
     const pending = layer.pending_addition;
     layer.pending_addition = [];
