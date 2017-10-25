@@ -10,6 +10,10 @@ const ShootingEntity = (function(){
     return true;
   }
 
+  function handle_gamepad(entity, gamepad){
+    entity.guns[0].state.shooting = gamepad.axes[5] > 0;
+  }
+
   function extend(entity){
     entity.guns = [Gun.create(MissileEntity.create(), entity)];
 
@@ -27,6 +31,12 @@ const ShootingEntity = (function(){
     entity.check_collision_against = function(other_entity, no_checkback){
       if(check_collision_against_precheck(entity, other_entity, no_checkback))
         parent_check_collision_against(other_entity, no_checkback)
+    };
+
+    const parent_handle_gamepad = entity.handle_gamepad;
+    entity.handle_gamepad = function(gamepad){
+      handle_gamepad(entity, gamepad);
+      if(parent_handle_gamepad) parent_handle_gamepad(gamepad);
     };
 
     return entity;

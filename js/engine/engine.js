@@ -6,7 +6,7 @@ const Engine = (function(){
   * Game loop
   */
   function update(engine, dt){
-    if(engine.gamepad) engine.handle_gamepad(engine, engine.gamepad);
+    if(engine.gamepad) engine.handle_gamepad(engine.gamepad);
     engine.world.update(dt);
     engine.scene_update(engine, dt);
   }
