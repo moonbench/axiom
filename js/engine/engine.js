@@ -9,10 +9,12 @@ const Engine = (function(){
     if(engine.gamepad) engine.handle_gamepad(engine.gamepad);
     engine.world.update(dt);
     engine.scene_update(engine, dt);
+    engine.overlay.update(dt);
   }
   function render(engine, dt){
     engine.viewport.clear(engine.ctx, engine.remainder);
     engine.world.render(engine.ctx, dt);
+    engine.overlay.render(engine.ctx, dt);
     engine.cursor.render(engine.ctx, dt);
     engine.viewport.render_foreground(engine.ctx, dt);
   }
@@ -98,6 +100,7 @@ const Engine = (function(){
       engine.ctx = engine.canvas.getContext("2d");
       engine.meter = Meter.create(engine, fps_meter_id);
       engine.viewport = Viewport.create(engine.canvas);
+      engine.overlay = Overlay.create(engine.viewport);
       engine.cursor = Cursor.create(engine.viewport.width/2, engine.viewport.height/2, engine.canvas);
 
       engine.run = function(){
