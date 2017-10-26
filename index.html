@@ -67,6 +67,7 @@
   <script type="text/javascript" src="js/universe/layer.js"></script>
   <script type="text/javascript" src="js/universe/world.js"></script>
   <script type="text/javascript" src="js/universe/viewport.js"></script>
+  <script type="text/javascript" src="js/universe/overlay.js"></script>
 
   <script type="text/javascript" src="js/gun.js"></script>
   <script type="text/javascript" src="js/cursor.js"></script>
@@ -174,6 +175,7 @@
           player.acceleration_time = 1;
           player.rotation = 4;
           world.add_player_entity(player);
+          world.engine.overlay.highlight.push(player);
 
           const pickup = CollectableEntity.extend(CollidableEntity.extend(Sprite.create(400, 400, 50, 100, 0, assets.images["laser1"])));
           world.add_entity(pickup);
@@ -186,7 +188,7 @@
           world.add_entity(station, 20);
 
           for(var i = 0; i<100; i++){
-            world.add_entity(DamageableEntity.extend(
+            let enemy = DamageableEntity.extend(
               MoveableEntity.extend(
                 SolidEntity.extend(
                   CollidableEntity.extend(
@@ -199,8 +201,9 @@
                     )
                   )
                 )
-              )
-            );
+              );
+            world.engine.overlay.highlight.push(enemy);
+            world.add_entity(enemy);
           }
 
           world.add_entity(Sprite.create(2200, 2000, 500, 900, 4, assets.images["ship2"]), 40);
