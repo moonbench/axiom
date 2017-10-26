@@ -99,7 +99,7 @@
           world.add_entity(bg, 10);
 
           const planet = MoveableEntity.extend(
-            Sprite.create(400, 420, 1500, 1500, 6, assets.images["title_planet"])
+            Sprite.create(400, 540, 1500, 1500, 6, assets.images["title_planet"])
           );
           planet.friction = 0;
           planet.state.rotate = 0.01;
@@ -150,7 +150,7 @@
           engine.audio.add_to_group("thruster", engine.assets.add_audio("thruster1", "assets/thruster2.mp3"));
           engine.assets.add_image("laser1", "assets/laser1.png");
           engine.assets.add_image("planet", "assets/planet.jpg");
-          engine.assets.add_image("test", "assets/fighter2.png");
+          engine.assets.add_image("test", "assets/junker.png");
           engine.assets.add_image("station", "assets/station.png");
           engine.assets.add_image("ship1", "assets/ship1.png");
           engine.assets.add_image("ship2", "assets/ship2.png");
@@ -169,11 +169,11 @@
             );
           world.add_entity(planet, 5);
 
-          player = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(CollidableEntity.extend(Sprite.create(0, 0, 60, 65, Math.PI, assets.images["test"]))))));
+          player = ShootingEntity.extend(DriveableEntity.extend(MoveableEntity.extend(SolidEntity.extend(CollidableEntity.extend(Sprite.create(0, 0, 60, 225, Math.PI, assets.images["test"]))))));
           player.is_selected = true;
           player.acceleration = 7;
           player.acceleration_time = 1;
-          player.rotation = 4;
+          player.rotation = 1;
           world.add_player_entity(player);
           world.engine.overlay.highlight.push(player);
 
