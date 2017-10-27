@@ -26,7 +26,7 @@ const Gun = (function(){
     let shot = MissileEntity.extend(
       MoveableEntity.extend(
         CollidableEntity.extend(
-          Sprite.create(gun.parent.x, gun.parent.y, 10, 100, gun.parent.angle, gun.parent.layer.world.engine.assets.images["laser1"])
+          Sprite.create(gun.parent.x, gun.parent.y, 10, 100, gun.parent.angle, 1, gun.parent.layer.world.engine.assets.images["laser1"])
         )
       )
     );

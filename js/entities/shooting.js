@@ -43,8 +43,8 @@ const ShootingEntity = (function(){
   }
 
   return {
-    create: function(x, y, width, height, angle){
-      return extend(Entity.extend(600, 200, 50, 80, Math.PI));
+    create: function(x, y, width, height, angle, mass){
+      return extend(Entity.extend(x, y, width, height, angle, mass));
     },
     extend,
   }

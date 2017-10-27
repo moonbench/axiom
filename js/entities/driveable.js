@@ -35,8 +35,8 @@ const DriveableEntity = (function(){
   }
 
   return {
-    create: function(world_x, world_y, width, height, angle) {
-      return extend(MoveableEntity.create(world_x, world_y, width, height, angle));
+    create: function(world_x, world_y, width, height, angle, mass) {
+      return extend(MoveableEntity.create(world_x, world_y, width, height, angle, mass));
     },
     extend,
   }

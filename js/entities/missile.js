@@ -57,8 +57,8 @@ const MissileEntity = (function(){
     return entity;
   }
   return {
-    create: function(x, y, width, height, angle, velocity){
-      return extend(MoveableEntity.extend(CollidableEntity.create(x, y, width, height, angle)), velocity);
+    create: function(x, y, width, height, angle, mass, velocity){
+      return extend(MoveableEntity.extend(CollidableEntity.create(x, y, width, height, angle, mass)), velocity);
     },
     extend,
   }

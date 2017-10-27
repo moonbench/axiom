@@ -51,9 +51,9 @@ const CollidableEntity = (function(){
     return b_max > a_min && b_min < a_max;
   }
 
-  function compute_resolutions(a, b, axis_distance){
+  function compute_resolution_vector(a, b, axis_distances){
     let resolution_vector = Vector.create(0,0);
-    axis_distance.forEach(function(distance, index){
+    axis_distances.forEach(function(distance, index){
       if((distance !== true && distance != 0) && (resolution_vector.magnitude == 0 || Math.abs(distance) < Math.abs(resolution_vector.magnitude))){
         if(index == 0) resolution_vector = Vector.create(a.angle, distance);
         else if(index == 1) resolution_vector = Vector.create(a.angle-Math.PI/2, distance);
@@ -61,13 +61,21 @@ const CollidableEntity = (function(){
         else if(index == 3) resolution_vector = Vector.create(b.angle+Math.PI/2, distance);
       }
     });
+    return resolution_vector;
+  }
+
+  function apply_resolution(a, b, resolution_vector){
     if(!a.resolution_vector) a.resolution_vector = Vector.create(0,0);
-    a.resolution_vector.add_vector(resolution_vector);
-    if(!b.resolution_vector) b.resolution_vector = Vector.create(a.resolution_vector.angle, -a.resolution_vector.magnitude);
-    if(a.vector){
-      a.vector.magnitude = a.vector.magnitude/2;
-      a.vector.angle = Math.atan2(Math.sin(a.resolution_vector.angle), Math.cos(a.resolution_vector.angle));
+    if(!b.moveable){
+      a.resolution_vector.add_vector(resolution_vector);
+    } else {
+      a.resolution_vector.add_vector(Vector.create(resolution_vector.angle, resolution_vector.magnitude * (b.mass/(a.mass + b.mass))));
     }
+  }
+
+  function compute_resolutions(a, b, axis_distances){
+    const resolution_vector = compute_resolution_vector(a, b, axis_distances);
+    apply_resolution(a, b, resolution_vector);
   }
 
   function entities_are_sat_colliding(a, b, axis_distances){
@@ -173,6 +181,7 @@ const CollidableEntity = (function(){
     entity.collision_checks = {};
     entity.collisions = [];
     entity.resolution_vector = false;
+    entity.elastic_vector = false;
   }
 
 
@@ -194,8 +203,8 @@ const CollidableEntity = (function(){
   }
 
   return {
-    create: function(world_x, world_y, width, height, angle) {
-      return extend(Entity.create(world_x, world_y, width, height, angle));
+    create: function(world_x, world_y, width, height, angle, mass) {
+      return extend(Entity.create(world_x, world_y, width, height, angle, mass));
     },
     extend,
   }
