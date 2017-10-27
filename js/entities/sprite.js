@@ -27,8 +27,8 @@ const Sprite = (function(){
   }
 
   return {
-    create: function(x, y, width, height, angle, asset, repeat){
-      return extend(Entity.create(x, y, width, height, angle), asset, repeat);
+    create: function(x, y, width, height, angle, mass, asset, repeat){
+      return extend(Entity.create(x, y, width, height, angle, mass), asset, repeat);
     },
     extend,
   }

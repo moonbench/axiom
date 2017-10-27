@@ -36,8 +36,8 @@ const DamageableEntity = (function(){
   }
 
   return {
-    create: function(x, y, width, height){
-      return extend(Entity.create(x, y, width, height, angle))
+    create: function(x, y, width, height, angle, mass){
+      return extend(Entity.create(x, y, width, height, angle, mass))
     },
     extend,
   }

@@ -109,6 +109,7 @@ const Entity = (function (){
   }
 
   function normalize(entity){
+    entity.mass = entity.mass < 0.00001 ? 0.00001 : entity.mass;
     entity.angle = Util.normalize_angle(entity.angle);
     entity.max_radius = Math.sqrt( Math.pow(entity.width/2,2) + Math.pow(entity.height/2,2));
     calculate_corners(entity);
@@ -126,15 +127,16 @@ const Entity = (function (){
   * Public methods
   */
   return {
-    create: function(x = null, y = null, width = 0, height = 0, angle = 0){
+    create: function(x = null, y = null, width = 0, height = 0, angle = 0, mass = 1){
       const entity = {
         x,
         y,
         width,
         height,
         angle,
+        mass,
         dead: false,
-        debug_level: 0,
+        debug_level: 1,
       };
       normalize(entity);
 
