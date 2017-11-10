@@ -1,6 +1,6 @@
 const title_scene = (function(){
   function start_game(){
-    game.set_scene(test_scene);
+    game.set_scene(level_scene);
   }
 
   return {

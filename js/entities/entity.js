@@ -136,7 +136,7 @@ const Entity = (function (){
         angle,
         mass,
         dead: false,
-        debug_level: 1,
+        debug_level: 0,
       };
       normalize(entity);
 
