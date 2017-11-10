@@ -39,9 +39,9 @@ const Gun = (function(){
   return {
     create: function(projectile, parent){
       var gun = {
-        projectiles_per_burst: 3,
-        time_between_shots: 0.7,
-        time_between_burst_shots: 0.06,
+        projectiles_per_burst: 4,
+        time_between_shots: 0.65,
+        time_between_burst_shots: 0.065,
         projectile,
         parent,
       };
