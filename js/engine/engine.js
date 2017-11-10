@@ -7,16 +7,16 @@ const Engine = (function(){
   */
   function update(engine, dt){
     if(engine.gamepad) engine.handle_gamepad(engine.gamepad);
-    engine.world.update(dt);
-    engine.scene_update(engine, dt);
-    engine.overlay.update(dt);
+    if(engine.world) engine.world.update(dt);
+    if(engine.scene_update) engine.scene_update(engine, dt);
+    if(engine.overlay) engine.overlay.update(dt);
   }
   function render(engine, dt){
-    engine.viewport.clear(engine.ctx, engine.remainder);
-    engine.world.render(engine.ctx, dt);
-    engine.overlay.render(engine.ctx, dt);
-    engine.cursor.render(engine.ctx, dt);
-    engine.viewport.render_foreground(engine.ctx, dt);
+    if(engine.viewport) engine.viewport.clear(engine.ctx, engine.remainder);
+    if(engine.world) engine.world.render(engine.ctx, dt);
+    if(engine.overlay) engine.overlay.render(engine.ctx, dt);
+    if(engine.cursor) engine.cursor.render(engine.ctx, dt);
+    if(engine.viewport) engine.viewport.render_foreground(engine.ctx, dt);
   }
 
   function draw_frame(engine){
@@ -81,6 +81,15 @@ const Engine = (function(){
     engine.viewport.set_world(world);
   }
 
+  function reset(engine){
+    engine.world = null;
+    engine.scene_update = function(){};
+    engine.handle_key = null;
+    engine.handle_mouse_move = null;
+    engine.handle_mouse_button = null;
+    engine.handle_gamepad = null;
+  }
+
   return {
     create: function(canvas_id, fps_meter_id){
       const engine = {
@@ -109,6 +118,7 @@ const Engine = (function(){
         })
       };
 
+      engine.reset = function(){reset(engine)};
       engine.set_world = function(world){ set_world(engine, world) };
 
       return engine;

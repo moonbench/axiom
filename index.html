@@ -127,7 +127,7 @@
     const test_scene = (function(){
       const world = World.create(20000, 4000);
       let player;
-      let next_planet;
+      let portal;
 
       world.allow_negative = true;
       return {
@@ -288,7 +288,15 @@
                 )
               )
             );
+
+            portal = DamageableEntity.extend(
+              CollidableEntity.extend(
+                Sprite.create(-100, -400, 100, 100, Math.PI, 1000, assets.images["title_planet"])
+                )
+              );
+            world.add_entity(portal);
         },
+
 
         update: function(engine, dt){
           if(!engine.gamepad){
@@ -298,6 +306,10 @@
             );
           }
           engine.viewport.center_on(player.x, player.y);
+          if(portal.collisions.length > 0){
+            engine.reset();
+            game.set_scene(level_scene);
+          }
         },
 
         handle_mouse_move: function(){},
