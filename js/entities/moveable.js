@@ -77,9 +77,36 @@ const MoveableEntity = (function(){
     entity.vector.add_vector(movement_vector);
 
     if(entity.vector.magnitude <= 0.1) entity.vector.magnitude = 0;
-    if(entity.vector.magnitude <= 0) return;
-    move_to(entity, entity.vector.x_after(entity.x, dt), entity.vector.y_after(entity.y, dt));
-    entity.vector.magnitude -= entity.vector.magnitude * entity.friction * dt;
+    if(entity.vector.magnitude > 0){
+      move_to(entity, entity.vector.x_after(entity.x, dt), entity.vector.y_after(entity.y, dt));
+      entity.vector.magnitude -= entity.vector.magnitude * entity.friction * dt;
+    }
+
+    if(entity.transitioning){
+      entity.transition.time += dt;
+      if(entity.transition.time >= entity.transition.duration){
+        entity.transition.time = entity.transition.duration;
+        entity.transitioning = false;
+      }
+      const distance = entity.transition.ease_function(entity.transition.time, 0, 1, entity.transition.duration);
+      move_to(entity,
+        entity.transition.vector.x_after(entity.transition.start_x, distance),
+        entity.transition.vector.y_after(entity.transition.start_y, distance)
+      );
+    }
+  }
+
+  function transition_to(entity, x, y, duration, ease_function){
+    entity.transitioning = true;
+    entity.transition = {
+      vector: Vector.create(Math.atan2(y-entity.y, x-entity.x), Math.sqrt(Math.pow(y-entity.y,2)+Math.pow(x-entity.x,2))),
+      start_x: entity.x,
+      start_y: entity.y,
+      time: 0,
+      distance: 0,
+      duration,
+      ease_function,
+    };
   }
 
 
@@ -125,7 +152,9 @@ const MoveableEntity = (function(){
       update(entity, dt);
       if(entity.rotated) entity.normalize();
     };
+
     entity.turn_towards = function(x, y){ turn_towards(entity, x, y) };
+    entity.transition_to = function(x, y, duration, ease_function){ transition_to(entity, x, y, duration, ease_function) };
 
     const parent_render = entity.render;
     entity.render = function(ctx, dt){ parent_render(ctx, dt); render(entity, ctx, dt) };
