@@ -10,13 +10,14 @@ Physics
 New entities
 ===
   Decomposable (Break into smaller entities, like destructable walls or ships)
+  Grouped objects (I.e., multiple entities that can move as a group like components of a menu)
 
 
 AI
 ===
   Pathfinding
   Scripted motions (Ex, driving on a path from A to B then do X then move to C and do Y)
-  Add the ability to create regions that trigger AI events  
+  Add the ability to create regions that trigger AI events
 
 
 Weapons
