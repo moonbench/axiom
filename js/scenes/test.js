@@ -58,7 +58,6 @@ const test_scene = (function(){
       player.is_selected = true;
       player.acceleration = 7;
       player.acceleration_time = 1;
-      player.rotation = 1;
       world.add_player_entity(player);
 
       // Test ships
