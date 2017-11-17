@@ -62,16 +62,29 @@ const MoveableEntity = (function(){
     entity.y = y;
     entity.moved = true;
   }
-  function update(entity, dt){
-    entity.moved = false;
-    entity.rotated = false;
+  function rotate_entity(entity, dt){
+    if(entity.state.rotate == 0) return;
 
-    if(entity.state.rotate != 0){
-      dampen_rotation(entity, dt);
-      entity.angle += entity.state.rotate * entity.rotation * dt;
-      entity.rotated = true;
+    dampen_rotation(entity, dt);
+
+    entity.angle += entity.state.rotate*dt;
+    entity.rotated = true;
+  }
+  function transition_entity(entity, dt){
+    if(!entity.transitioning) return;
+
+    entity.transition.time += dt;
+    if(entity.transition.time >= entity.transition.duration){
+      entity.transition.time = entity.transition.duration;
+      entity.transitioning = false;
     }
-
+    const distance = entity.transition.ease_function(entity.transition.time, 0, 1, entity.transition.duration);
+    move_to(entity,
+      entity.transition.vector.x_after(entity.transition.start_x, distance),
+      entity.transition.vector.y_after(entity.transition.start_y, distance)
+    );
+  }
+  function move_entity(entity, dt){
     const movement_vector = Vector.create(0, 0);
     movement_vector.add_vector( acceleration_vector(entity, dt));
     entity.vector.add_vector(movement_vector);
@@ -81,19 +94,14 @@ const MoveableEntity = (function(){
       move_to(entity, entity.vector.x_after(entity.x, dt), entity.vector.y_after(entity.y, dt));
       entity.vector.magnitude -= entity.vector.magnitude * entity.friction * dt;
     }
+  }
+  function update(entity, dt){
+    entity.moved = false;
+    entity.rotated = false;
 
-    if(entity.transitioning){
-      entity.transition.time += dt;
-      if(entity.transition.time >= entity.transition.duration){
-        entity.transition.time = entity.transition.duration;
-        entity.transitioning = false;
-      }
-      const distance = entity.transition.ease_function(entity.transition.time, 0, 1, entity.transition.duration);
-      move_to(entity,
-        entity.transition.vector.x_after(entity.transition.start_x, distance),
-        entity.transition.vector.y_after(entity.transition.start_y, distance)
-      );
-    }
+    rotate_entity(entity, dt);
+    move_entity(entity, dt);
+    transition_entity(entity, dt);
   }
 
   function transition_to(entity, x, y, duration, ease_function){
@@ -137,10 +145,10 @@ const MoveableEntity = (function(){
    */
   function extend(entity){
     entity.moveable = true;
-    entity.max_rotation_speed = Math.PI;
+    entity.max_rotation_speed = Math.PI/2;
+    entity.rotation_interpoloation = 0.5;
     entity.friction = 0.4;
     entity.acceleration = 1;
-    entity.rotation = 1;
     entity.acceleration_time = 1;
     entity.accelerations = {forward: false, reverse: false, left: false, right: false};
 
