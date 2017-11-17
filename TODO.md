@@ -5,6 +5,9 @@ Physics
   Elastic collisions
   Complex collision models (Multiple shapes grouped as one)
   Non-square models (i.e., circles)
+  Make it so that rotations don't get super slow just at the end
+  Add accelleration physics to rotations
+  Add some notion of torque or an ability to limit rotation when colliding
 
 
 New entities
